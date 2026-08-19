@@ -40,3 +40,51 @@
     padding-top: env(safe-area-inset-top, 0px);
   }
 }
+
+/* ────────────────────────────────────────────────────────────────────────────
+   Printing.
+   The browser's own Print → "Save as PDF" is the PDF export: it needs no
+   library, and what prints is exactly what staff previewed. Everything except
+   the invoice layout is hidden.
+   ──────────────────────────────────────────────────────────────────────────── */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  /* Hide everything, then reveal only the invoice and its contents.
+     Visibility (not display) is used because #invoice-print sits deep inside
+     the router tree — hiding ancestors with display:none would hide it too. */
+  body * {
+    visibility: hidden;
+  }
+
+  #invoice-print,
+  #invoice-print * {
+    visibility: visible;
+  }
+
+  #invoice-print {
+    display: block !important;
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+  }
+
+  /* Keep table rows and the totals block intact across page breaks. */
+  #invoice-print table {
+    page-break-inside: auto;
+  }
+  #invoice-print tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  #invoice-print thead {
+    display: table-header-group;
+  }
+}

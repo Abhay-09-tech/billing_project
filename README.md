@@ -92,25 +92,39 @@ Every one of these has a test in `npm run db:test`.
 
 ## Current state
 
+New here? Start with **[docs/GETTING-STARTED.md](docs/GETTING-STARTED.md)** — it walks
+through creating the Supabase project and signing in for the first time.
+
 | Phase | Status |
 |---|---|
 | Architecture, ERD, security, deployment plan | ✅ Done — `docs/ARCHITECTURE.md` |
 | Database: 33 tables, RLS, RPCs, seed | ✅ Done and verified |
 | Database test suite (40 assertions) | ✅ Passing |
 | Auth, RBAC, responsive shell, navigation | ✅ Done |
-| Service layer for every module | ✅ Done |
-| Dashboard (live metrics, order queue, sales overview) | ✅ Done |
-| Customers: list, search, progressive create, Customer 360 | ✅ Done |
-| Prescriptions: entry, history, image upload | ✅ Done |
-| Products, Inventory | ⏳ Phase 5 — backend done, screens pending |
-| Orders, Lab | ⏳ Phase 6 — backend done, screens pending |
-| Billing, Payments, Outstanding, PDF | ⏳ Phase 7 — backend done, screens pending |
-| Reports, Settings | ⏳ Phase 8 |
-| WhatsApp dispatcher, webhook, automation UI | ⏳ Phase 9–10 |
-| PWA polish, E2E tests, security + performance review | ⏳ Phase 11–12 |
+| Dashboard — live metrics, today's queue, sales overview | ✅ Done |
+| Customers — search, fast create with duplicate check, Customer 360 | ✅ Done |
+| Prescriptions — entry, history, image upload | ✅ Done |
+| Products — catalogue, GST/HSN per product, opening stock | ✅ Done |
+| Inventory — levels, low-stock alerts, movement ledger | ✅ Done |
+| Orders — builder, 11-state workflow, send to lab | ✅ Done |
+| Lab — job queue, QC pass/fail, remakes | ✅ Done |
+| Billing — draft → issue → print/PDF, cancel | ✅ Done |
+| Payments — record, methods, outstanding + reminders | ✅ Done |
+| Reports — sales, payment methods, outstanding ageing, CSV export | ✅ Done |
+| Settings — shop profile, GST config, numbering | ✅ Done |
+| WhatsApp — dashboard, templates, automation toggles | ✅ Done (UI) |
+| WhatsApp — Cloud API dispatcher + delivery webhook | ⏳ Needs the SIM and Meta account |
+| Playwright E2E, security + performance review, deployment | ⏳ Phase 11–12 |
 
-Screens not yet built show exactly what already works underneath and what the screen
-will add — they never display invented numbers.
+Every screen in the navigation is built and reads live data. Nothing on any screen is
+hardcoded or sample data.
+
+**What "WhatsApp UI done, dispatcher pending" means:** messages are queued in the
+database with full idempotency and retry state, templates and automation rules are
+editable, and the dashboard shows queue status. The Edge Function that actually calls
+Meta's API is not written yet — it needs the dedicated phone number and a verified Meta
+Business account first. In the meantime, the WhatsApp buttons on bills, orders and the
+outstanding list open WhatsApp with the message pre-typed, which works today.
 
 ---
 
