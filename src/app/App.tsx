@@ -37,7 +37,9 @@ export function App() {
   if (status === 'signed_out') return <LoginPage />
 
   return (
-    <BrowserRouter>
+    // basename keeps routing correct when the app is served from a
+    // sub-path, e.g. GitHub Pages at /billing_project/.
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route element={<AppShell />}>
           <Route

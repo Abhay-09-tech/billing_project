@@ -31,3 +31,7 @@ scripts/db-test/.pgdata/
 
 # Sample PDF produced by npm run pdf:test
 scripts/pdf-test/*.pdf
+
+# Local dev server logs
+dev-server.log
+dev-server.err.log

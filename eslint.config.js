@@ -31,6 +31,10 @@ export default tseslint.config(
   // ───────────────────────────────────────────────────────────────────────────
   {
     files: ['src/features/**/*.{ts,tsx}', 'src/components/**/*.{ts,tsx}', 'src/app/**/*.{ts,tsx}'],
+    // ConnectScreen is the one justified exception: it verifies credentials
+    // that are not configured yet, so by definition it cannot go through the
+    // shared client the service layer uses.
+    ignores: ['src/features/setup/ConnectScreen.tsx'],
     rules: {
       'no-restricted-imports': [
         'error',

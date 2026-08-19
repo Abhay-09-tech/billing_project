@@ -1,0 +1,104 @@
+name: Verify and deploy
+
+# Builds and publishes the app to GitHub Pages so it can be opened from any
+# device — phone included — without running anything locally.
+#
+# The Supabase connection is NOT baked in by default. Without the optional
+# secrets below, the deployed app shows its Connect screen and you paste the
+# Project URL and anon key once per device. Add the secrets and it connects
+# automatically for everyone instead.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race; let a newer push supersede an in-flight one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Type check
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Unit tests
+        run: npm test
+      - name: PDF generation test
+        run: npm run pdf:test
+
+  database:
+    name: Verify migrations
+    runs-on: ubuntu-latest
+    # Deliberately NOT a gate on deploying. Migrations are applied separately
+    # by `npm run db:push`; a schema problem does not make the already-built
+    # frontend wrong. This job still fails loudly so the problem is visible.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Database tests (56 assertions on a real Postgres)
+        run: npm run db:test
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          # Turns Pages on for the repository if it is not already enabled.
+          enablement: true
+
+      - name: Build
+        env:
+          # Project sites live under /<repo>/, so assets and routing need that
+          # prefix. vite.config.ts normalises the trailing slash.
+          VITE_BASE: ${{ steps.pages.outputs.base_path }}
+          # Optional. Safe to expose: the anon key is public by design and every
+          # table is protected by row-level security. NEVER add the service_role
+          # key here — it bypasses all security.
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_APP_ENV: production
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

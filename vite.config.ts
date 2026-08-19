@@ -1,16 +1,43 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// Served from a sub-path on GitHub Pages (/billing_project/), from the root
+// everywhere else. Vite needs both a leading and a trailing slash; the Pages
+// action supplies the path without the trailing one.
+const base = normalizeBase(process.env.VITE_BASE)
+
+function normalizeBase(value: string | undefined): string {
+  if (!value || value === '/') return '/'
+  const withLeading = value.startsWith('/') ? value : `/${value}`
+  return withLeading.endsWith('/') ? withLeading : `${withLeading}/`
+}
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     tailwindcss(),
+    // GitHub Pages has no server-side rewrite, so a deep link like
+    // /customers/123 would 404. Serving the same document as 404.html lets the
+    // SPA boot and route it correctly, with the URL preserved.
+    {
+      name: 'spa-404-fallback',
+      closeBundle() {
+        const dist = fileURLToPath(new URL('./dist', import.meta.url))
+        const index = path.join(dist, 'index.html')
+        if (fs.existsSync(index)) {
+          fs.copyFileSync(index, path.join(dist, '404.html'))
+        }
+      },
+    },
     VitePWA({
       registerType: 'prompt',
-      includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.svg'],
       manifest: {
         name: 'Perfect Optical Vision',
         short_name: 'POV',
@@ -19,11 +46,15 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        // Relative so "Add to Home screen" works from a sub-path too.
+        start_url: base,
+        scope: base,
+        // A single SVG rather than PNGs that would have to be checked in as
+        // binaries: it stays sharp at every size and both Android Chrome and
+        // iOS Safari accept it for "Add to Home screen".
         icons: [
-          { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml' },
+          { src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable' },
         ],
       },
       workbox: {
