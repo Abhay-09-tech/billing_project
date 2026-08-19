@@ -36,7 +36,11 @@ export default defineConfig({
       },
     },
     VitePWA({
-      registerType: 'prompt',
+      // autoUpdate, not 'prompt': 'prompt' requires the app to render an
+      // "update available" dialog, and without one an installed phone would
+      // keep running the version it was installed with, forever. Shop staff
+      // should never have to think about app versions.
+      registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
         name: 'Perfect Optical Vision',
@@ -58,11 +62,15 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        globPatterns: ['**/*.{js,css,html,svg,woff2}'],
+        // Deep links inside the installed app resolve to the shell, so
+        // /customers/123 opens correctly instead of failing.
+        navigateFallback: `${base}index.html`,
         // Never cache API responses: financial and clinical data must always be
         // read live. Only the application shell is cached for offline start-up.
         navigateFallbackDenylist: [/^\/api/, /supabase/],
         runtimeCaching: [],
+        cleanupOutdatedCaches: true,
       },
     }),
   ],
