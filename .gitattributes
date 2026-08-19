@@ -1,0 +1,17 @@
+# Normalise line endings in the repository to LF.
+# Without this, Windows checkouts commit CRLF and every cross-machine edit
+# produces whole-file diffs and phantom merge conflicts.
+* text=auto eol=lf
+
+# Binary — never touch these.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.woff2 binary
+
+# Generated: keep out of diffs and language stats.
+package-lock.json linguist-generated=true -diff
+src/types/database.ts linguist-generated=true

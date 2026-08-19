@@ -1,0 +1,30 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+.DS_Store
+
+# Environment — never commit real keys
+.env
+.env.*
+!.env.example
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+supabase/.env
+
+# Build / test artefacts
+coverage/
+playwright-report/
+test-results/
+.vite/
+*.tsbuildinfo
+
+# Throwaway Postgres cluster created by `npm run db:test`
+scripts/db-test/.pgdata/
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
