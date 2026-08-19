@@ -424,6 +424,8 @@ export type WhatsAppMessageStatus =
   | 'read'
   | 'failed'
   | 'cancelled'
+  /** Manual hand-off: staff opened WhatsApp with the message prepared. */
+  | 'opened'
 
 export type WhatsAppTemplateRow = {
   id: string
@@ -474,6 +476,8 @@ export type WhatsAppMessageRow = {
   related_entity_type: string | null
   related_entity_id: string | null
   triggered_by: 'automation' | 'manual'
+  /** cloud_api = sent by the dispatcher; manual_link = staff opened WhatsApp. */
+  send_method: 'cloud_api' | 'manual_link'
   created_by: string | null
   created_at: string
   updated_at: string
@@ -616,7 +620,10 @@ export type Database = {
   public: {
     Tables: {
       branches: TableDef<BranchRow>
-      profiles: TableDef<ProfileRow>
+      profiles: TableDef<
+        ProfileRow,
+        [FK<'profiles', 'role_id', 'roles'>, FK<'profiles', 'branch_id', 'branches'>]
+      >
       roles: TableDef<RoleRow>
       permissions: TableDef<{ code: string; module: string; description: string }>
       role_permissions: TableDef<{ role_id: string; permission_code: string }>
@@ -732,6 +739,16 @@ export type Database = {
       rpc_refund_payment: { Args: Record<string, unknown>; Returns: PaymentRow }
       rpc_adjust_stock: { Args: Record<string, unknown>; Returns: InventoryTransactionRow }
       rpc_next_sku: { Args: Record<string, never>; Returns: string }
+      rpc_log_manual_whatsapp: {
+        Args: {
+          p_customer_id: string | null
+          p_to_msisdn: string
+          p_body: string
+          p_entity_type?: string | null
+          p_entity_id?: string | null
+        }
+        Returns: WhatsAppMessageRow
+      }
       rpc_dashboard_metrics: { Args: { p_day?: string }; Returns: DashboardMetrics }
       rpc_sales_overview: { Args: { p_from: string; p_to: string }; Returns: SalesOverviewRow[] }
     }

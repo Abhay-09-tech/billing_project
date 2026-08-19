@@ -84,6 +84,30 @@ export async function updateTemplate(
   if (error) throw error
 }
 
+/**
+ * Record that staff opened WhatsApp with a prepared message.
+ *
+ * Status is 'opened', never 'sent'/'delivered' — a database CHECK enforces
+ * that a manual_link message can never claim delivery (brief §13).
+ */
+export async function logManualWhatsApp(params: {
+  customerId: string | null
+  toMsisdn: string
+  body: string
+  entityType?: string | null
+  entityId?: string | null
+}): Promise<WhatsAppMessageRow> {
+  const { data, error } = await supabase.rpc('rpc_log_manual_whatsapp', {
+    p_customer_id: params.customerId,
+    p_to_msisdn: params.toMsisdn,
+    p_body: params.body,
+    p_entity_type: params.entityType ?? null,
+    p_entity_id: params.entityId ?? null,
+  })
+  if (error) throw error
+  return data as WhatsAppMessageRow
+}
+
 /** Whether the provider has actually been connected yet. */
 export async function isProviderConfigured(): Promise<boolean> {
   const { data, error } = await supabase

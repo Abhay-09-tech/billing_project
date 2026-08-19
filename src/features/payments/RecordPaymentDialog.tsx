@@ -43,9 +43,17 @@ export function RecordPaymentDialog({
   const [notes, setNotes] = useState('')
   const [allowAdvance, setAllowAdvance] = useState(false)
 
+  // One idempotency key per opening of the dialog. If the staff member hits
+  // Record twice, or the network retries, the database returns the payment it
+  // already created rather than taking the money twice.
+  const [requestId, setRequestId] = useState(() => crypto.randomUUID())
+
   // Default to settling the bill in full — the overwhelmingly common case.
   useEffect(() => {
-    if (open) setAmount(balance > 0 ? balance.toFixed(2) : '')
+    if (open) {
+      setAmount(balance > 0 ? balance.toFixed(2) : '')
+      setRequestId(crypto.randomUUID())
+    }
   }, [open, balance])
 
   const value = parseMoney(amount)
@@ -61,6 +69,7 @@ export function RecordPaymentDialog({
         referenceNo: reference.trim() || undefined,
         notes: notes.trim() || undefined,
         allowAdvance: overBalance && allowAdvance,
+        requestId,
       }),
     onSuccess: () => {
       toast.success(`${formatMoney(value)} received from ${customerName}`)

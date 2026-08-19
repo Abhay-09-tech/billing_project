@@ -115,6 +115,12 @@ export interface CreateOrderInput {
   notes?: string | null
   advanceAmount?: number
   advanceMethod?: string
+  /**
+   * Generated once per form submission. A double click, a retry or a second
+   * tab sends the same id and the database returns the original order instead
+   * of creating a second one (brief §15).
+   */
+  requestId?: string
 }
 
 export async function createOrder(input: CreateOrderInput): Promise<OrderRow> {
@@ -126,6 +132,7 @@ export async function createOrder(input: CreateOrderInput): Promise<OrderRow> {
     p_notes: input.notes ?? null,
     p_advance_amount: input.advanceAmount ?? 0,
     p_advance_method: input.advanceMethod ?? 'cash',
+    p_request_id: input.requestId ?? null,
   })
   if (error) throw error
   return data as OrderRow

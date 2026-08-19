@@ -8,8 +8,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardHeader, ErrorState, LoadingState, PageHeader } from '@/components/ui/layout'
 import { FormField, Input, Select, Textarea } from '@/components/ui/fields'
 import { cn } from '@/lib/utils'
+import { UsersPanel } from './UsersPanel'
+import { AuditPanel } from './AuditPanel'
+import { BackupPanel } from './BackupPanel'
+import { SetupChecklist } from './SetupChecklist'
 
-type Tab = 'shop' | 'billing' | 'numbering'
+type Tab = 'setup' | 'shop' | 'billing' | 'numbering' | 'users' | 'audit' | 'backup'
 
 interface ShopProfile {
   name?: string
@@ -28,36 +32,51 @@ interface BillingSettings {
 }
 
 export default function SettingsPage() {
-  const [tab, setTab] = useState<Tab>('shop')
+  const [tab, setTab] = useState<Tab>('setup')
 
   return (
     <>
-      <PageHeader title="Settings" subtitle="Shop details, tax configuration and document numbering" />
+      <PageHeader
+        title="Settings"
+        subtitle="Shop details, tax configuration, users, audit trail and backups"
+      />
 
-      <div className="mb-4 flex gap-1 rounded-lg bg-gray-100 p-1 sm:inline-flex">
-        {(
-          [
-            ['shop', 'Shop'],
-            ['billing', 'Billing & GST'],
-            ['numbering', 'Numbering'],
-          ] as const
-        ).map(([value, label]) => (
-          <button
-            key={value}
-            onClick={() => setTab(value)}
-            className={cn(
-              'flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors sm:flex-none',
-              tab === value ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900',
-            )}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="mb-4 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+        <div className="inline-flex gap-1 rounded-lg bg-gray-100 p-1">
+          {(
+            [
+              ['setup', 'Setup'],
+              ['shop', 'Shop'],
+              ['billing', 'Billing & GST'],
+              ['numbering', 'Numbering'],
+              ['users', 'Users'],
+              ['audit', 'Audit log'],
+              ['backup', 'Export & backup'],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              onClick={() => setTab(value)}
+              className={cn(
+                'rounded-md px-3.5 py-2 text-sm font-medium whitespace-nowrap transition-colors',
+                tab === value
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900',
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
+      {tab === 'setup' && <SetupChecklist onGoToTab={(t) => setTab(t as Tab)} />}
       {tab === 'shop' && <ShopSettings />}
       {tab === 'billing' && <BillingSettingsPanel />}
       {tab === 'numbering' && <NumberingSettings />}
+      {tab === 'users' && <UsersPanel />}
+      {tab === 'audit' && <AuditPanel />}
+      {tab === 'backup' && <BackupPanel />}
     </>
   )
 }

@@ -15,6 +15,12 @@ import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/fields'
 import { RANGE_LABELS, resolveRange, type RangePreset } from '@/lib/date-ranges'
 import { cn } from '@/lib/utils'
+import { WhatsAppShareDialog } from '@/features/whatsapp/WhatsAppShareDialog'
+import { buildPaymentReminderMessage } from '@/lib/whatsapp'
+import { getSetting } from '@/services/settings'
+import { PERMS } from '@/lib/permissions'
+import { useAuth } from '@/app/AuthProvider'
+import type { OutstandingRow } from '@/types/database'
 
 const PAGE_SIZE = 25
 
@@ -22,10 +28,17 @@ type Tab = 'received' | 'outstanding'
 
 export default function PaymentsPage() {
   const navigate = useNavigate()
+  const { can } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [page, setPage] = useState(0)
   const [preset, setPreset] = useState<RangePreset>('last30')
   const [method, setMethod] = useState<PaymentMethod | ''>('')
+  const [reminder, setReminder] = useState<OutstandingRow | null>(null)
+
+  const shop = useQuery({
+    queryKey: ['settings', 'shop.profile'],
+    queryFn: () => getSetting<{ name?: string }>('shop.profile'),
+  })
 
   const tab: Tab = searchParams.get('tab') === 'outstanding' ? 'outstanding' : 'received'
   const setTab = (next: Tab) => {
@@ -250,10 +263,6 @@ export default function PaymentsPage() {
               <TBody>
                 {outstanding.data.map((row) => {
                   const days = Number(row.days_outstanding)
-                  const waNumber = row.whatsapp_number ?? row.mobile
-                  const text = encodeURIComponent(
-                    `Hello ${row.full_name}, your pending balance for invoice ${row.invoice_no} at Perfect Optical Vision is ₹${Number(row.balance).toFixed(2)}. Kindly clear it at your convenience. Thank you.`,
-                  )
                   return (
                     <TR key={row.invoice_id}>
                       <TD>
@@ -298,12 +307,17 @@ export default function PaymentsPage() {
                         )}
                       </TD>
                       <TD>
-                        <a href={`https://wa.me/91${waNumber}?text=${text}`} target="_blank" rel="noreferrer">
-                          <Button variant="outline" size="sm">
+                        {can(PERMS.whatsappSend) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-[#25D366] text-[#128C7E] hover:bg-[#25D366]/10"
+                            onClick={() => setReminder(row)}
+                          >
                             <MessageCircle className="h-4 w-4" />
-                            Remind
+                            Send Reminder
                           </Button>
-                        </a>
+                        )}
                       </TD>
                     </TR>
                   )
@@ -312,6 +326,26 @@ export default function PaymentsPage() {
             </Table>
           )}
         </Card>
+      )}
+
+      {reminder && (
+        <WhatsAppShareDialog
+          open={Boolean(reminder)}
+          onOpenChange={(v) => !v && setReminder(null)}
+          title="Send payment reminder"
+          customerId={reminder.customer_id}
+          customerName={reminder.full_name}
+          savedWhatsApp={reminder.whatsapp_number}
+          mobile={reminder.mobile}
+          message={buildPaymentReminderMessage({
+            shopName: shop.data?.name || 'Perfect Optical Vision',
+            customerName: reminder.full_name,
+            invoiceNo: reminder.invoice_no,
+            balance: Number(reminder.balance),
+          })}
+          relatedEntityType="invoice"
+          relatedEntityId={reminder.invoice_id}
+        />
       )}
     </>
   )

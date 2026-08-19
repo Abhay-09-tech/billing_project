@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, FlaskConical, Phone, Receipt } from 'lucide-react'
+import { ArrowLeft, FlaskConical, MessageCircle, Phone, Receipt } from 'lucide-react'
 import { toast } from 'sonner'
 import {
   createLabOrder,
@@ -10,7 +10,7 @@ import {
   getOrderStatuses,
   setOrderStatus,
 } from '@/services/orders'
-import { createInvoiceFromOrder } from '@/services/billing'
+import { createInvoiceFromOrder, issueInvoice } from '@/services/billing'
 import type { OrderStatusCode } from '@/types/database'
 import { formatMoney } from '@/lib/money'
 import { formatDate, formatDateTime, formatMobile } from '@/lib/format'
@@ -24,6 +24,9 @@ import { Table, TBody, TD, TDNum, TH, THead, THNum, TR } from '@/components/ui/t
 import { Dialog } from '@/components/ui/dialog'
 import { FormField, Input, Select, Textarea } from '@/components/ui/fields'
 import { RxCard } from '@/features/prescriptions/RxCard'
+import { WhatsAppShareDialog } from '@/features/whatsapp/WhatsAppShareDialog'
+import { buildOrderReadyMessage, buildOrderUpdateMessage } from '@/lib/whatsapp'
+import { getSetting } from '@/services/settings'
 
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -35,6 +38,12 @@ export default function OrderDetailPage() {
   const [cancelOpen, setCancelOpen] = useState(false)
   const [cancelReason, setCancelReason] = useState('')
   const [labOpen, setLabOpen] = useState(false)
+  const [waOpen, setWaOpen] = useState(false)
+
+  const shop = useQuery({
+    queryKey: ['settings', 'shop.profile'],
+    queryFn: () => getSetting<{ name?: string }>('shop.profile'),
+  })
 
   const query = useQuery({
     queryKey: ['order', id],
@@ -67,11 +76,17 @@ export default function OrderDetailPage() {
   })
 
   const invoiceMutation = useMutation({
-    mutationFn: () => createInvoiceFromOrder(query.data!.order.customer_id, id!),
+    mutationFn: async () => {
+      // Create the draft and issue it in one action: staff think of this as
+      // "make the bill", not two steps. rpc_create_invoice is guarded by a
+      // unique index on (order_id) so a double click cannot bill twice.
+      const draft = await createInvoiceFromOrder(query.data!.order.customer_id, id!)
+      return issueInvoice(draft.id)
+    },
     onSuccess: (invoice) => {
-      toast.success('Draft bill created')
+      toast.success(`Invoice ${invoice.invoice_no} created`)
       invalidate()
-      navigate(`/billing/${invoice.id}`)
+      navigate(`/billing/${invoice.id}?created=1`)
     },
     onError: (err) => toast.error(friendlyError(err, 'Could not create the bill.')),
   })
@@ -85,6 +100,25 @@ export default function OrderDetailPage() {
   const nextStatuses = (current?.allowed_next ?? []).filter((c) => c !== 'cancelled')
   const canCancel = (current?.allowed_next ?? []).includes('cancelled')
   const balance = Number(order.grand_total) - Number(order.advance_amount)
+  const isReady = order.status === 'ready' || order.status === 'customer_notified'
+  const shopName = shop.data?.name || 'Perfect Optical Vision'
+  const customerName = order.customers?.full_name ?? 'Customer'
+
+  // "Ready" gets the pickup wording; every other status gets a progress update.
+  const waMessage = isReady
+    ? buildOrderReadyMessage({
+        shopName,
+        customerName,
+        orderCode: order.order_code,
+        balance,
+      })
+    : buildOrderUpdateMessage({
+        shopName,
+        customerName,
+        orderCode: order.order_code,
+        statusLabel: current?.label ?? order.status,
+        expectedDate: order.expected_delivery_date ? formatDate(order.expected_delivery_date) : null,
+      })
 
   return (
     <>
@@ -127,6 +161,21 @@ export default function OrderDetailPage() {
                   Call
                 </Button>
               </a>
+            )}
+            {can(PERMS.whatsappSend) && (
+              <Button
+                variant={isReady ? 'primary' : 'outline'}
+                size="sm"
+                className={
+                  isReady
+                    ? 'bg-[#25D366] hover:bg-[#1da851]'
+                    : 'border-[#25D366] text-[#128C7E] hover:bg-[#25D366]/10'
+                }
+                onClick={() => setWaOpen(true)}
+              >
+                <MessageCircle className="h-4 w-4" />
+                {isReady ? 'Notify Customer on WhatsApp' : 'Send Order Update'}
+              </Button>
             )}
             {can(PERMS.labManage) && labOrders.length === 0 && (
               <Button variant="outline" size="sm" onClick={() => setLabOpen(true)}>
@@ -358,6 +407,20 @@ export default function OrderDetailPage() {
           .map((i) => i.description)
           .join('; ')}
         onDone={invalidate}
+      />
+
+      <WhatsAppShareDialog
+        open={waOpen}
+        onOpenChange={setWaOpen}
+        title={isReady ? 'Notify customer — order ready' : 'Send order update'}
+        customerId={order.customer_id}
+        customerName={customerName}
+        savedWhatsApp={order.customers?.whatsapp_number}
+        mobile={order.customers?.mobile}
+        message={waMessage}
+        relatedEntityType="order"
+        relatedEntityId={order.id}
+        onSent={invalidate}
       />
     </>
   )

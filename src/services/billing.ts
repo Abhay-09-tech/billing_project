@@ -126,6 +126,8 @@ export async function recordPayment(params: {
   referenceNo?: string
   notes?: string
   allowAdvance?: boolean
+  /** Idempotency key generated once per submission — see rpc_record_payment. */
+  requestId?: string
 }): Promise<PaymentRow> {
   const { data, error } = await supabase.rpc('rpc_record_payment', {
     p_invoice_id: params.invoiceId,
@@ -134,6 +136,7 @@ export async function recordPayment(params: {
     p_reference_no: params.referenceNo ?? null,
     p_notes: params.notes ?? null,
     p_allow_advance: params.allowAdvance ?? false,
+    p_request_id: params.requestId ?? null,
   })
   if (error) throw error
   return data as PaymentRow

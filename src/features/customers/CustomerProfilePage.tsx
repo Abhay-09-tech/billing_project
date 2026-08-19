@@ -23,12 +23,21 @@ import { InvoiceStatusBadge, OrderStatusBadge, PaymentStatusBadge, WaStatusBadge
 import { Table, TBody, TD, TDNum, TH, THead, THNum, TR } from '@/components/ui/table'
 import { RxCard } from '@/features/prescriptions/RxCard'
 import { NewPrescriptionDialog } from '@/features/prescriptions/NewPrescriptionDialog'
+import { WhatsAppShareDialog } from '@/features/whatsapp/WhatsAppShareDialog'
+import { buildGeneralMessage } from '@/lib/whatsapp'
+import { getSetting } from '@/services/settings'
 
 export default function CustomerProfilePage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { can } = useAuth()
   const [rxOpen, setRxOpen] = useState(false)
+  const [waOpen, setWaOpen] = useState(false)
+
+  const shop = useQuery({
+    queryKey: ['settings', 'shop.profile'],
+    queryFn: () => getSetting<{ name?: string }>('shop.profile'),
+  })
 
   const query = useQuery({
     queryKey: ['customer', id],
@@ -43,7 +52,6 @@ export default function CustomerProfilePage() {
   const { customer, prescriptions, orders, invoices, payments, whatsapp, totals, addresses } = query.data
   const currentRx = prescriptions.find((p) => !p.voided_at)
   const history = prescriptions.filter((p) => p.id !== currentRx?.id)
-  const waNumber = customer.whatsapp_number ?? customer.mobile
 
   return (
     <>
@@ -73,12 +81,17 @@ export default function CustomerProfilePage() {
                 {formatMobile(customer.mobile)}
               </Button>
             </a>
-            <a href={`https://wa.me/91${waNumber}`} target="_blank" rel="noreferrer">
-              <Button variant="outline" size="sm">
+            {can(PERMS.whatsappSend) && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-[#25D366] text-[#128C7E] hover:bg-[#25D366]/10"
+                onClick={() => setWaOpen(true)}
+              >
                 <MessageCircle className="h-4 w-4" />
-                WhatsApp
+                WhatsApp Customer
               </Button>
-            </a>
+            )}
             {can(PERMS.ordersCreate) && (
               <Button size="sm" onClick={() => navigate(`/orders?new=1&customer=${customer.id}`)}>
                 <Plus className="h-4 w-4" />
@@ -291,6 +304,23 @@ export default function CustomerProfilePage() {
       {id && (
         <NewPrescriptionDialog open={rxOpen} onOpenChange={setRxOpen} customerId={id} />
       )}
+
+      <WhatsAppShareDialog
+        open={waOpen}
+        onOpenChange={setWaOpen}
+        title="Message customer on WhatsApp"
+        customerId={customer.id}
+        customerName={customer.full_name}
+        savedWhatsApp={customer.whatsapp_number}
+        mobile={customer.mobile}
+        message={buildGeneralMessage({
+          shopName: shop.data?.name || 'Perfect Optical Vision',
+          customerName: customer.full_name,
+        })}
+        relatedEntityType="customer"
+        relatedEntityId={customer.id}
+        hint="Write your message below, then open WhatsApp to send it."
+      />
     </>
   )
 }

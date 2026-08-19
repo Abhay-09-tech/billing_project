@@ -28,3 +28,6 @@ scripts/db-test/.pgdata/
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# Sample PDF produced by npm run pdf:test
+scripts/pdf-test/*.pdf

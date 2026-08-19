@@ -58,8 +58,15 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
   const [advanceMethod, setAdvanceMethod] = useState('cash')
   const [productSearch, setProductSearch] = useState('')
 
+  // Idempotency key per opening of the dialog — a double click on
+  // "Create order" returns the order already created, never a second one.
+  const [requestId, setRequestId] = useState(() => crypto.randomUUID())
+
   useEffect(() => {
-    if (open && initialCustomerId) setCustomerId(initialCustomerId)
+    if (open) {
+      setRequestId(crypto.randomUUID())
+      if (initialCustomerId) setCustomerId(initialCustomerId)
+    }
   }, [open, initialCustomerId])
 
   const searchResults = useQuery({
@@ -110,6 +117,7 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
         notes: notes.trim() || null,
         advanceAmount: advance ? Number(advance) : 0,
         advanceMethod,
+        requestId,
         items: lines.map((l) => ({
           item_kind: l.item_kind,
           product_id: l.product_id,

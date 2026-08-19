@@ -340,6 +340,134 @@ async function main() {
     if (r.n !== 0) fail(`stock drift rows: ${r.n}`);
     else ok('stock ledger reconciles with cache');
 
+    // ── 13. Duplicate prevention (brief §15) ────────────────────────────────
+
+    // 13a. A second invoice for the same order is refused by the unique index,
+    //      not merely by the RPC's own check.
+    try {
+      await q(`select public.rpc_create_invoice($1, $2, null)`, [custId, orderId]);
+      fail('a second invoice was created for the same order');
+    } catch {
+      ok('duplicate invoice for an order blocked');
+    }
+
+    // 13b. Same request_id on a payment returns the original, not a second one.
+    const beforePayments = (await one(`select count(*)::int n from public.payments`)).n;
+    const payReq = '11111111-2222-4333-8444-555555555555';
+    // Create a second order + invoice with a balance to pay against.
+    const order2 = await one(
+      `select * from public.rpc_create_order($1,
+        '[{"item_kind":"lens","description":"Test lens","qty":1,"unit_price":1000,"gst_rate_pct":12}]'::jsonb,
+        null, null, null, 0, 'cash')`, [custId]);
+    const inv2 = await one(`select * from public.rpc_create_invoice($1, $2, null)`, [custId, order2.id]);
+    await q(`select public.rpc_issue_invoice($1, date '2026-08-19')`, [inv2.id]);
+
+    const p1 = await one(
+      `select * from public.rpc_record_payment($1, 500, 'cash', null, null, false, $2)`,
+      [inv2.id, payReq]);
+    const p2 = await one(
+      `select * from public.rpc_record_payment($1, 500, 'cash', null, null, false, $2)`,
+      [inv2.id, payReq]);
+    if (p1.id !== p2.id) fail('same request_id created two payments');
+    else ok('duplicate payment blocked by request_id');
+
+    const afterPayments = (await one(`select count(*)::int n from public.payments`)).n;
+    if (afterPayments !== beforePayments + 1) {
+      fail(`payment count moved by ${afterPayments - beforePayments}, expected 1`);
+    } else ok('exactly one payment row written for two identical submits');
+
+    r = await one(`select amount_paid from public.invoices where id = $1`, [inv2.id]);
+    if (Number(r.amount_paid) !== 500) fail(`amount_paid double-counted: ${r.amount_paid}`);
+    else ok('invoice balance not double-counted');
+
+    // 13c. Same request_id on an order returns the original order.
+    const ordReq = '99999999-8888-4777-8666-555555555555';
+    const o1 = await one(
+      `select * from public.rpc_create_order($1,
+        '[{"item_kind":"lens","description":"Dup test","qty":1,"unit_price":100,"gst_rate_pct":12}]'::jsonb,
+        null, null, null, 0, 'cash', $2)`, [custId, ordReq]);
+    const o2 = await one(
+      `select * from public.rpc_create_order($1,
+        '[{"item_kind":"lens","description":"Dup test","qty":1,"unit_price":100,"gst_rate_pct":12}]'::jsonb,
+        null, null, null, 0, 'cash', $2)`, [custId, ordReq]);
+    if (o1.id !== o2.id) fail('same request_id created two orders');
+    else ok('duplicate order blocked by request_id');
+
+    // 13d. Stock is deducted once, not twice, by the de-duplicated order.
+    const frameBefore = Number(
+      (await one(`select qty_on_hand from public.product_stock where product_id = $1`, [frameId])).qty_on_hand);
+    const stockReq = '77777777-6666-4555-8444-333333333333';
+    for (let i = 0; i < 2; i++) {
+      await q(
+        `select public.rpc_create_order($1,
+          $2::jsonb, null, null, null, 0, 'cash', $3)`,
+        [custId,
+         JSON.stringify([{ item_kind: 'product', product_id: frameId, description: 'Frame', qty: 1, unit_price: 5000, gst_rate_pct: 12 }]),
+         stockReq]);
+    }
+    const frameAfter = Number(
+      (await one(`select qty_on_hand from public.product_stock where product_id = $1`, [frameId])).qty_on_hand);
+    if (frameBefore - frameAfter !== 1) {
+      fail(`stock moved by ${frameBefore - frameAfter}, expected exactly 1`);
+    } else ok('inventory deducted once despite duplicate submit');
+
+    // ── 14. Manual WhatsApp is logged honestly (brief §13) ──────────────────
+
+    const manual = await one(
+      `select * from public.rpc_log_manual_whatsapp($1, '919876543210', 'Hello Ramesh', 'invoice', $2)`,
+      [custId, invId]);
+    if (manual.status !== 'opened' || manual.send_method !== 'manual_link') {
+      fail(`manual log wrong: status=${manual.status} method=${manual.send_method}`);
+    } else ok('manual WhatsApp recorded as opened / manual_link');
+
+    // A manual message must never be able to claim delivery.
+    try {
+      await q(`update public.whatsapp_messages set status = 'delivered' where id = $1`, [manual.id]);
+      fail('a manual message was marked delivered');
+    } catch {
+      ok('manual message cannot claim delivery');
+    }
+
+    // An invalid number is refused before any link is built.
+    try {
+      await q(`select public.rpc_log_manual_whatsapp($1, '12345', 'x')`, [custId]);
+      fail('invalid msisdn accepted');
+    } catch {
+      ok('invalid WhatsApp number rejected');
+    }
+
+    // ── 15. Dispatcher claim is concurrency-safe ───────────────────────────
+
+    await q(`update public.whatsapp_messages
+                set status = 'queued', send_method = 'cloud_api'
+              where send_method = 'cloud_api'`);
+    const queuedCount = (await one(
+      `select count(*)::int n from public.whatsapp_messages where status = 'queued'`)).n;
+
+    const batch1 = await q(`select * from public.claim_whatsapp_batch(100)`);
+    const batch2 = await q(`select * from public.claim_whatsapp_batch(100)`);
+    if (batch1.rows.length !== queuedCount || batch2.rows.length !== 0) {
+      fail(`claim not exclusive: first=${batch1.rows.length} second=${batch2.rows.length} of ${queuedCount}`);
+    } else ok(`dispatcher claimed ${batch1.rows.length} messages exclusively (second run got 0)`);
+
+    // Stale 'sending' rows are recovered rather than lost forever.
+    // In production updated_at ages by itself after the claim; here we have to
+    // suspend the touch-trigger to simulate a worker that died an hour ago.
+    await q(`alter table public.whatsapp_messages disable trigger wa_messages_set_updated_at`);
+    await q(`update public.whatsapp_messages
+                set updated_at = now() - interval '1 hour' where status = 'sending'`);
+    await q(`alter table public.whatsapp_messages enable trigger wa_messages_set_updated_at`);
+
+    const requeued = (await one(`select public.requeue_stale_whatsapp() n`)).n;
+    if (requeued < 1) fail('stale sending messages were not requeued');
+    else ok(`stale dispatcher rows requeued (${requeued})`);
+
+    // …and they are claimable again, so nothing is stranded.
+    const reclaim = await q(`select * from public.claim_whatsapp_batch(100)`);
+    if (reclaim.rows.length !== requeued) {
+      fail(`requeued ${requeued} but only ${reclaim.rows.length} were claimable`);
+    } else ok('requeued messages are claimable again');
+
     console.log(process.exitCode ? '\n✖ FAILURES PRESENT' : '\n✔ ALL CHECKS PASSED');
   } finally {
     await client.end().catch(() => {});

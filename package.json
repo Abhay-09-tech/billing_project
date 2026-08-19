@@ -22,8 +22,9 @@
     "db:diff": "supabase db diff",
     "db:push": "supabase db push",
     "db:test": "node scripts/db-test/run.mjs",
+    "pdf:test": "node scripts/pdf-test/check.mjs",
     "db:types": "supabase gen types typescript --local > src/types/database.ts",
-    "verify": "npm run typecheck && npm run lint && npm run test"
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run pdf:test"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -43,6 +44,8 @@
     "@tanstack/react-query": "^5.62.11",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "lucide-react": "^0.469.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

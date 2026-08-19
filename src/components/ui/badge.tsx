@@ -79,7 +79,18 @@ const waTones: Record<WhatsAppMessageStatus, Tone> = {
   read: 'teal',
   failed: 'red',
   cancelled: 'gray',
+  opened: 'purple',
 }
+
+// "Opened" is deliberately worded as an action the staff took, not as a
+// delivery claim — only the Cloud API can report delivery (brief §13).
+const waLabels: Partial<Record<WhatsAppMessageStatus, string>> = {
+  opened: 'Opened in WhatsApp',
+  sent: 'Sent',
+  delivered: 'Delivered',
+  read: 'Read',
+}
+
 export function WaStatusBadge({ status }: { status: WhatsAppMessageStatus }) {
-  return <Badge tone={waTones[status]}>{status}</Badge>
+  return <Badge tone={waTones[status]}>{waLabels[status] ?? status}</Badge>
 }
