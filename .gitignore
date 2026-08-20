@@ -7,6 +7,13 @@ dist-ssr/
 # Environment — never commit real keys
 .env
 .env.*
+# Exception: production build config. Holds ONLY the project URL and the
+# publishable key, both of which are public by design - they are compiled
+# into the JavaScript bundle and readable by anyone using the app. Row-level
+# security is what protects the data, not secrecy of this key. Committing it
+# means every device opens straight at the login screen instead of asking
+# each visitor to paste connection details.
+!.env.production
 !.env.example
 
 # Supabase local
