@@ -35,3 +35,6 @@ scripts/pdf-test/*.pdf
 # Local dev server logs
 dev-server.log
 dev-server.err.log
+
+# Generated setup PDF (contains project ref and local IP)
+Perfect-Optical-Vision-Setup-Queries.pdf
