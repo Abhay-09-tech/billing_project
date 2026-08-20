@@ -1,26 +1,37 @@
-HOW TO ADD YOUR LOGO
-====================
+LOGO ASSET REQUIRED
+===================
 
-1. Save your logo file into THIS folder, named exactly:
+The application expects ONE complete logo image containing the entire
+lock-up: the mark AND the words "Perfect vision", "BILLING SOFTWARE" and
+"SMART BILLING. CLEAR VISION."
 
-       logo.svg          (best - stays sharp at any size)
-   or  logo.png          (fine - use 512x512 or larger, transparent background)
+Save your logo into THIS folder, named exactly:
 
-2. Save the same artwork over  favicon.svg  in this folder, so the browser
-   tab and the phone home-screen icon match.
+    perfect-vision-billing-logo.png
 
-3. Run:  npm run dev        (to see it locally)
-   or:   git add -A && git commit -m "Add logo" && git push
-                            (to publish it to the live site)
+A .webp or .svg of the same name also works.
 
-That's it. The logo appears automatically in:
-   - the sidebar
-   - the mobile top bar
-   - the login screen
-   - the connect screen
+Recommended: transparent background, around 1200px wide.
 
-No code changes needed. The app looks for logo.svg first, then logo.png, and
-falls back to a plain placeholder mark if neither is present.
+Then run:
+    npm run dev                                   (see it locally)
+or:
+    git add -A && git commit -m "Add logo" && git push     (publish it)
 
-Your logo is never stretched or distorted: it is centred inside a square box
-at its own aspect ratio, with clear space around it.
+It then appears automatically in:
+    - the connect screen
+    - the login screen
+    - the sidebar
+    - the mobile header
+    - the browser tab icon
+    - the installed app icon
+
+No code changes are needed anywhere.
+
+UNTIL THAT FILE EXISTS, the product name shows as plain text. That is a
+deliberate missing-asset state, not a substitute logo - no icon is drawn,
+so it stays obvious that the artwork has not been supplied yet.
+
+The image is never cropped or stretched: it renders at its own aspect
+ratio, capped at 220px wide (max 70% of screen) on entry screens, with no
+container or background behind it.

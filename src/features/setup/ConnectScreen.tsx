@@ -90,9 +90,9 @@ export function ConnectScreen({ onConnected }: { onConnected: () => void }) {
     <div className="min-h-dvh bg-cream-100">
       <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 py-6 sm:max-w-lg sm:py-10">
         {/* ── Brand ─────────────────────────────────────────────────────── */}
-        <header className="mb-5 sm:mb-7">
-          <Logo size="xl" stacked showTagline />
-          <p className="mt-4 text-center text-sm text-brand-700 sm:text-base">
+        <header className="mb-4 flex flex-col items-center sm:mb-6">
+          <Logo width="lg" className="mb-3" />
+          <p className="text-center text-sm text-brand-700 sm:text-base">
             Connect to your database to begin
           </p>
         </header>
@@ -200,6 +200,7 @@ export function ConnectScreen({ onConnected }: { onConnected: () => void }) {
               </p>
             )}
 
+            <div className="sticky bottom-0 -mx-4 border-t border-cream-200 bg-white/95 px-4 py-3 backdrop-blur-sm sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
             <Button
               size="lg"
               className="min-h-touch w-full active:scale-[0.99]"
@@ -223,6 +224,7 @@ export function ConnectScreen({ onConnected }: { onConnected: () => void }) {
                 </>
               )}
             </Button>
+            </div>
           </div>
         </div>
 

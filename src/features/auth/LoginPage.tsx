@@ -33,7 +33,7 @@ export function LoginPage() {
     <div className="flex min-h-dvh items-center justify-center bg-cream-100 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3">
-          <Logo size="lg" showTagline />
+          <Logo width="md" />
           <p className="mt-1 text-sm text-brand-600">Sign in to continue</p>
         </div>
 

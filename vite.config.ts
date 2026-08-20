@@ -41,7 +41,7 @@ export default defineConfig({
       // keep running the version it was installed with, forever. Shop staff
       // should never have to think about app versions.
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
+      includeAssets: ['perfect-vision-billing-logo.png'],
       manifest: {
         name: 'Perfect Vision Billing Software',
         short_name: 'Perfect Vision',
@@ -57,8 +57,8 @@ export default defineConfig({
         // binaries: it stays sharp at every size and both Android Chrome and
         // iOS Safari accept it for "Add to Home screen".
         icons: [
-          { src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml' },
-          { src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable' },
+          { src: 'perfect-vision-billing-logo.png', sizes: '512x512', type: 'image/png' },
+          { src: 'perfect-vision-billing-logo.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {

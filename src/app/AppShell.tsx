@@ -36,7 +36,7 @@ export function AppShell() {
       {/* ── Desktop sidebar ─────────────────────────────────────────────── */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col bg-brand-900 lg:flex">
         <div className="px-4 py-5">
-          <Logo tone="onDark" />
+          <Logo tone="onDark" width="sm" />
         </div>
         <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 pb-4" aria-label="Main">
           {items.map((item) => (
@@ -74,7 +74,7 @@ export function AppShell() {
 
       {/* ── Mobile top bar ──────────────────────────────────────────────── */}
       <header className="pt-safe sticky top-0 z-30 flex items-center justify-between border-b border-cream-300 bg-cream-50 px-4 py-3 lg:hidden">
-        <Logo size="sm" />
+        <Logo width="sm" />
         <button
           onClick={() => void signOut()}
           className="rounded-lg p-2 text-brand-500 transition-colors hover:bg-brand-50 hover:text-brand-800"
