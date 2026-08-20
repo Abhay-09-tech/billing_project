@@ -176,10 +176,24 @@ h2('Your project')
 kv([
   ['Project URL', PROJECT_URL],
   ['Project reference', PROJECT_REF],
-  ['Supabase dashboard', 'https://supabase.com/dashboard'],
   ['App (this laptop)', 'http://localhost:5173/'],
   ['App (phone, same Wi-Fi)', LAN_URL],
 ])
+
+h2('Direct links to the two pages you need')
+doc.setFont('courier', 'normal').setFontSize(8).setTextColor(...INK)
+for (const [label, link] of [
+  ['Create logins', 'https://supabase.com/dashboard/project/' + PROJECT_REF + '/auth/users'],
+  ['Run SQL', 'https://supabase.com/dashboard/project/' + PROJECT_REF + '/sql/new'],
+]) {
+  need(5)
+  doc.setFont('helvetica', 'bold').setFontSize(9).setTextColor(...INK)
+  doc.text(label, M, y)
+  doc.setFont('courier', 'normal').setFontSize(8).setTextColor(...TEAL)
+  doc.text(link, M + 26, y)
+  y += 5
+}
+y += 2
 
 h2('Already installed and verified')
 bullets([
@@ -210,30 +224,52 @@ para(
 )
 
 h2('Step 1a - Create the user')
+para('Open this page directly (or Dashboard > Authentication > Users):', { color: INK })
+code('https://supabase.com/dashboard/project/' + PROJECT_REF + '/auth/users')
 bullets([
-  'Supabase dashboard > Authentication > Users',
-  'Click "Add user" then "Create new user"',
+  'Click the "Add user" button (top right) and choose "Create new user"',
   'Enter your email address and a password',
   'Tick "Auto Confirm User" - without this you cannot sign in yet',
-  'Click Create user',
+  'Click "Create user"',
+  'You should now see your email listed in the Users table. If the list is still empty, this step did not work - do not continue to 1b.',
 ])
 
 h2('Step 1b - Give it Admin rights')
-para('Open SQL Editor > New query. Replace the two values in capitals, then Run:')
+para(
+  'Open SQL Editor > New query. Replace the two values in capitals, then Run. ' +
+    'Step 1a must be finished first - this query checks, and tells you plainly if ' +
+    'the login does not exist yet.',
+)
 code(
-  "insert into public.profiles (id, full_name, role_id, branch_id)\n" +
-    "select u.id, 'YOUR NAME', r.id, b.id\n" +
-    "from auth.users u, public.roles r, public.branches b\n" +
-    "where u.email = 'YOUR-EMAIL-HERE'\n" +
-    "  and r.code = 'admin'\n" +
-    "  and b.is_default\n" +
-    'on conflict (id) do update\n' +
-    '  set role_id = excluded.role_id, is_active = true;',
+  'do $$\n' +
+    'declare v_user uuid;\n' +
+    'begin\n' +
+    '  select id into v_user from auth.users\n' +
+    "   where lower(email) = lower('YOUR-EMAIL-HERE');\n" +
+    '\n' +
+    '  if v_user is null then\n' +
+    "    raise exception 'No login exists for that email yet. Create it first in " +
+    "Authentication > Users > Add user, then run this again.';\n" +
+    '  end if;\n' +
+    '\n' +
+    '  insert into public.profiles (id, full_name, role_id, branch_id)\n' +
+    "  select v_user, 'YOUR NAME', r.id, b.id\n" +
+    '  from public.roles r, public.branches b\n' +
+    "  where r.code = 'admin' and b.is_default\n" +
+    '  on conflict (id) do update\n' +
+    '    set role_id = excluded.role_id, is_active = true;\n' +
+    '\n' +
+    "  raise notice 'Admin access granted. You can now sign in.';\n" +
+    'end $$;',
 )
 
-para(
-  'Safe to run more than once. If the profile already exists it is updated rather ' +
-    'than duplicated.',
+callout(
+  'Why this version checks first',
+  'A plain INSERT ... SELECT that matches no rows inserts nothing and still reports ' +
+    '"Success. No rows returned" - so a mistyped email, or skipping step 1a, looks ' +
+    'exactly like it worked. This version stops with a clear message instead. Safe to ' +
+    'run more than once.',
+  'info',
 )
 
 callout(
@@ -262,14 +298,24 @@ para(
     'that r.code is "staff" here, not "admin":',
 )
 code(
-  "insert into public.profiles (id, full_name, role_id, branch_id)\n" +
-    "select u.id, 'STAFF NAME', r.id, b.id\n" +
-    "from auth.users u, public.roles r, public.branches b\n" +
-    "where u.email = 'STAFF-EMAIL-HERE'\n" +
-    "  and r.code = 'staff'\n" +
-    "  and b.is_default\n" +
-    'on conflict (id) do update\n' +
-    '  set role_id = excluded.role_id, is_active = true;',
+  'do $$\n' +
+    'declare v_user uuid;\n' +
+    'begin\n' +
+    '  select id into v_user from auth.users\n' +
+    "   where lower(email) = lower('STAFF-EMAIL-HERE');\n" +
+    '\n' +
+    '  if v_user is null then\n' +
+    "    raise exception 'No login exists for that email yet. Create it in " +
+    "Authentication > Users first.';\n" +
+    '  end if;\n' +
+    '\n' +
+    '  insert into public.profiles (id, full_name, role_id, branch_id)\n' +
+    "  select v_user, 'STAFF NAME', r.id, b.id\n" +
+    '  from public.roles r, public.branches b\n' +
+    "  where r.code = 'staff' and b.is_default\n" +
+    '  on conflict (id) do update\n' +
+    '    set role_id = excluded.role_id, is_active = true;\n' +
+    'end $$;',
 )
 
 h2('What Staff can and cannot do')
