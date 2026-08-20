@@ -2,8 +2,30 @@
 
 Optical retail management, billing and WhatsApp automation for **Perfect Optical Vision**.
 
+### 🔗 Use the software
+
+**https://abhay-09-tech.github.io/billing_project/**
+
+Works on any phone, tablet or computer. On a phone you can install it like a normal
+app: **Chrome → ⋮ → Add to Home screen**, or **Safari → Share → Add to Home Screen**.
+
+On first open it asks for your Supabase **Project URL** and **publishable key**
+(Supabase → Project Settings → API). It remembers them on that device. The
+publishable key is safe to enter — every table is protected by row-level security,
+and you still have to sign in.
+
+> **Deploying this yourself?** GitHub Pages has to be switched on once, by hand:
+> **Settings → Pages → Build and deployment → Source → GitHub Actions**. The
+> workflow cannot enable it for you — `GITHUB_TOKEN` has no admin scope — so
+> until that switch is flipped the deploy job stops at "Configure Pages".
+
+---
+
 React + TypeScript PWA on Supabase (Postgres + Auth + Storage + Edge Functions).
 Design decisions and reasoning live in **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — read that first.
+
+New to the project? **[docs/GETTING-STARTED.md](docs/GETTING-STARTED.md)** walks through
+setup from scratch, written for someone who has never used Supabase.
 
 ---
 
