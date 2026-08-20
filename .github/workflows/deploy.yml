@@ -95,11 +95,11 @@ jobs:
           # Project sites live under /<repo>/, so assets and routing need that
           # prefix. vite.config.ts normalises the trailing slash.
           VITE_BASE: ${{ steps.pages.outputs.base_path }}
-          # Optional. Safe to expose: the anon key is public by design and every
-          # table is protected by row-level security. NEVER add the service_role
-          # key here — it bypasses all security.
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          # Connection config comes from .env.production, which is committed.
+          # These are NOT passed as secrets here on purpose: an explicitly set
+          # environment variable overrides the .env file even when it is empty,
+          # so an unset secret would silently blank the configuration and send
+          # every visitor back to the setup screen.
           VITE_APP_ENV: production
         run: npm run build
 
