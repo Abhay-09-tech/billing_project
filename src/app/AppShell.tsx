@@ -5,7 +5,7 @@ import { useAuth } from './AuthProvider'
 import { NAV_ITEMS } from './nav'
 import { cn } from '@/lib/utils'
 import { initials } from '@/lib/format'
-import { Logo, LogoMark } from '@/components/ui/logo'
+import { Logo } from '@/components/ui/logo'
 
 /**
  * Responsive shell:
@@ -74,17 +74,7 @@ export function AppShell() {
 
       {/* ── Mobile top bar ──────────────────────────────────────────────── */}
       <header className="pt-safe sticky top-0 z-30 flex items-center justify-between border-b border-cream-300 bg-cream-50 px-4 py-3 lg:hidden">
-        <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 p-1.5">
-            <LogoMark className="h-full w-full" />
-          </span>
-          <span className="leading-tight">
-            <span className="block text-sm font-semibold tracking-tight text-brand-900">
-              Perfect Vision
-            </span>
-            <span className="block text-[11px] font-medium text-brand-600">Billing Software</span>
-          </span>
-        </div>
+        <Logo size="sm" />
         <button
           onClick={() => void signOut()}
           className="rounded-lg p-2 text-brand-500 transition-colors hover:bg-brand-50 hover:text-brand-800"

@@ -30,7 +30,8 @@
     "setup:pdf": "node scripts/setup-pdf/generate.mjs",
     "theme:contrast": "node scripts/theme/contrast.mjs",
     "logo:preview": "node scripts/theme/render-logo.mjs",
-    "connect:shoot": "node scripts/theme/shoot-connect.mjs"
+    "connect:shoot": "node scripts/theme/shoot-connect.mjs",
+    "logo:png": "node scripts/theme/logo-png.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
