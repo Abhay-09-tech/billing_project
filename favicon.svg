@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Perfect Vision">
+  <rect width="512" height="512" rx="112" fill="#3B2418"/>
+  <g fill="none" stroke="#F7F1E8" stroke-width="26" stroke-linejoin="round">
+    <path d="M74 256s70-110 182-110 182 110 182 110-70 110-182 110S74 256 74 256Z"/>
+    <circle cx="256" cy="256" r="66"/>
+  </g>
+  <circle cx="256" cy="256" r="26" fill="#C8A27A"/>
+</svg>
