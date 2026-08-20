@@ -1,35 +1,66 @@
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 
 /**
  * The single source of truth for Perfect Vision branding.
  *
  * Every logo in the app renders through this component — sidebar, mobile bar,
- * login, connect screen, printed invoice. When the real artwork arrives it is
- * swapped in HERE, in one place, and the whole application follows.
+ * login, connect screen — so the artwork is defined in exactly one place.
  *
  * ─────────────────────────────────────────────────────────────────────────
- *  PLACEHOLDER NOTICE
- *  The supplied reference image never reached us, so the mark below is a
- *  neutral geometric stand-in in the coffee palette — deliberately simple,
- *  NOT an invented brand. To install the real logo:
+ *  TO INSTALL THE REAL LOGO: drop the file in and rebuild. No code changes.
  *
- *    1. Save it as  public/logo.svg  (preferred) or public/logo.png
- *    2. In LogoMark below, replace the <svg> with:
- *         <img src={`${import.meta.env.BASE_URL}logo.svg`} alt=""
- *              className={cn('object-contain', className)} />
- *    3. Replace public/favicon.svg with the same artwork
+ *    public/logo.svg     (preferred — stays sharp at every size)
+ *    public/logo.png     (also fine — use at least 512×512, transparent)
  *
- *  Nothing else needs editing. Proportions are preserved because every
- *  caller sizes a square box and the artwork is object-contain inside it.
+ *  This component looks for logo.svg, then logo.png, and falls back to the
+ *  neutral placeholder mark below if neither exists. The fallback is
+ *  deliberately plain geometry, NOT an invented brand.
+ *
+ *  Also replace public/favicon.svg with the same artwork so the browser tab
+ *  and phone home-screen icon match.
  * ─────────────────────────────────────────────────────────────────────────
  */
 
 type Tone = 'onLight' | 'onDark'
 
-/** The icon only — square, no text. */
+// Vite rewrites BASE_URL per deployment, so this resolves correctly whether
+// the app is served from the root or from /billing_project/ on GitHub Pages.
+const CANDIDATES = [
+  `${import.meta.env.BASE_URL}logo.svg`,
+  `${import.meta.env.BASE_URL}logo.png`,
+]
+
+/**
+ * The icon only — square, no text.
+ *
+ * Artwork is never stretched: the box is square and the image is
+ * object-contain, so any aspect ratio is preserved with clear space around it.
+ */
 export function LogoMark({ className, tone = 'onLight' }: { className?: string; tone?: Tone }) {
-  // Two versions so the mark stays legible on either background, rather than
-  // one version fighting for contrast on both.
+  // Walks the candidate list on load failure, then gives up to the fallback.
+  const [attempt, setAttempt] = useState(0)
+
+  if (attempt < CANDIDATES.length) {
+    return (
+      <img
+        src={CANDIDATES[attempt]}
+        alt=""
+        onError={() => setAttempt((a) => a + 1)}
+        className={cn('h-full w-full shrink-0 object-contain', className)}
+      />
+    )
+  }
+
+  return <PlaceholderMark className={className} tone={tone} />
+}
+
+/**
+ * Neutral stand-in used only until real artwork is supplied. Two versions so
+ * the mark stays legible on either background rather than one fighting for
+ * contrast on both.
+ */
+function PlaceholderMark({ className, tone = 'onLight' }: { className?: string; tone?: Tone }) {
   const ring = tone === 'onDark' ? '#F7F1E8' : '#6F4E37'
   const pupil = tone === 'onDark' ? '#C8A27A' : '#8B6F47'
 
@@ -41,7 +72,6 @@ export function LogoMark({ className, tone = 'onLight' }: { className?: string; 
       aria-label="Perfect Vision"
       fill="none"
     >
-      {/* Eye outline — the optical half of the identity. */}
       <path
         d="M4 24s7.5-11 20-11 20 11 20 11-7.5 11-20 11S4 24 4 24Z"
         stroke={ring}
@@ -56,7 +86,7 @@ export function LogoMark({ className, tone = 'onLight' }: { className?: string; 
 
 /**
  * Mark plus wordmark, in the brand hierarchy:
- *   Perfect Vision  (primary)
+ *   Perfect Vision   (primary)
  *   Billing Software (secondary)
  */
 export function Logo({
@@ -79,7 +109,7 @@ export function Logo({
 
   return (
     <div className={cn('flex items-center gap-2.5', className)}>
-      {/* Clear space around the mark is preserved by the padded rounded box. */}
+      {/* Padding inside the rounded box preserves clear space around the mark. */}
       <span
         className={cn(
           'flex items-center justify-center rounded-xl p-1.5',
