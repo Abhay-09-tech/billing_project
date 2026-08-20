@@ -38,3 +38,6 @@ dev-server.err.log
 
 # Generated setup PDF (contains project ref and local IP)
 Perfect-Optical-Vision-Setup-Queries.pdf
+
+# Generated logo/screen previews
+scripts/theme/preview/
