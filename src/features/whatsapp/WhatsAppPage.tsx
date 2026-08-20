@@ -78,9 +78,9 @@ export default function WhatsAppPage() {
       <PageHeader title="WhatsApp" subtitle="Automatic customer messages and their delivery status" />
 
       {configured.data === false && (
-        <div className="mb-5 flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3.5">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
-          <div className="text-sm text-amber-900">
+        <div className="mb-5 flex items-start gap-2.5 rounded-lg border border-warning-600/30 bg-warning-50 p-3.5">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-warning-600" />
+          <div className="text-sm text-warning-700">
             <p className="font-medium">WhatsApp is not connected yet.</p>
             <p className="mt-1">
               Messages are queued but nothing is sent. To go live you need a dedicated SIM (one
@@ -102,7 +102,7 @@ export default function WhatsAppPage() {
         <Stat label="Failed" value={stats.data?.failed ?? 0} tone={stats.data?.failed ? 'red' : undefined} />
       </div>
 
-      <div className="mb-4 flex gap-1 rounded-lg bg-gray-100 p-1 sm:inline-flex">
+      <div className="mb-4 flex gap-1 rounded-lg bg-cream-200 p-1 sm:inline-flex">
         {(
           [
             ['messages', 'Messages'],
@@ -118,7 +118,7 @@ export default function WhatsAppPage() {
             }}
             className={cn(
               'flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors sm:flex-none',
-              tab === value ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900',
+              tab === value ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-700 hover:text-brand-900',
             )}
           >
             {label}
@@ -137,7 +137,7 @@ export default function WhatsAppPage() {
                   setStatus(e.target.value as WhatsAppMessageStatus | '')
                   setPage(0)
                 }}
-                className="h-9 rounded-lg border border-gray-300 bg-white px-2 text-sm focus:border-brand-600 focus:outline-none"
+                className="h-9 rounded-lg border border-cream-300 bg-white px-2 text-sm focus:border-brand-600 focus:outline-none"
                 aria-label="Filter by status"
               >
                 <option value="">All</option>
@@ -175,24 +175,24 @@ export default function WhatsAppPage() {
                   {messages.data.rows.map((m) => (
                     <TR key={m.id}>
                       <TD>
-                        <p className="text-gray-900">{m.customers?.full_name ?? '—'}</p>
-                        <p className="text-xs tabular-nums text-gray-500">
+                        <p className="text-brand-900">{m.customers?.full_name ?? '—'}</p>
+                        <p className="text-xs tabular-nums text-brand-600">
                           {formatMobile(m.to_msisdn)}
                         </p>
                       </TD>
                       <TD className="max-w-xs">
-                        <p className="truncate text-gray-700">{m.rendered_body ?? '—'}</p>
+                        <p className="truncate text-brand-800">{m.rendered_body ?? '—'}</p>
                         {m.status === 'failed' && m.error_message && (
-                          <p className="mt-0.5 truncate text-xs text-red-600">{m.error_message}</p>
+                          <p className="mt-0.5 truncate text-xs text-error-600">{m.error_message}</p>
                         )}
                       </TD>
-                      <TD className="hidden text-gray-600 lg:table-cell">
+                      <TD className="hidden text-brand-700 lg:table-cell">
                         {m.whatsapp_templates?.name ?? '—'}
                       </TD>
                       <TD>
                         <WaStatusBadge status={m.status} />
                       </TD>
-                      <TD className="hidden whitespace-nowrap text-gray-500 sm:table-cell">
+                      <TD className="hidden whitespace-nowrap text-brand-600 sm:table-cell">
                         {formatDateTime(m.sent_at ?? m.created_at)}
                       </TD>
                     </TR>
@@ -218,14 +218,14 @@ export default function WhatsAppPage() {
           ) : rules.isError ? (
             <ErrorState message={friendlyError(rules.error)} onRetry={() => void rules.refetch()} />
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-cream-200">
               {rules.data.map((rule) => (
                 <li key={rule.id} className="flex items-start justify-between gap-3 px-4 py-3.5 sm:px-5">
                   <div>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-brand-900">
                       {EVENT_LABELS[rule.event_key] ?? rule.event_key}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-brand-600">
                       Sends “{rule.whatsapp_templates?.name}”
                       {rule.delay_minutes > 0 &&
                         ` after ${rule.delay_minutes >= 1440 ? `${Math.round(rule.delay_minutes / 1440)} day(s)` : `${rule.delay_minutes} min`}`}
@@ -244,9 +244,9 @@ export default function WhatsAppPage() {
                       onChange={(e) =>
                         toggleRule.mutate({ id: rule.id, enabled: e.target.checked })
                       }
-                      className="h-5 w-5 rounded border-gray-300 text-brand-700 focus:ring-brand-600"
+                      className="h-5 w-5 rounded border-cream-300 text-brand-700 focus:ring-brand-600"
                     />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-brand-700">
                       {rule.is_enabled ? 'On' : 'Off'}
                     </span>
                   </label>
@@ -265,20 +265,20 @@ export default function WhatsAppPage() {
           ) : templates.isError ? (
             <ErrorState message={friendlyError(templates.error)} onRetry={() => void templates.refetch()} />
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-cream-200">
               {templates.data.map((t) => (
                 <li key={t.id} className="px-4 py-3.5 sm:px-5">
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className="font-medium text-gray-900">{t.name}</p>
+                    <p className="font-medium text-brand-900">{t.name}</p>
                     <Badge tone={t.category === 'marketing' ? 'amber' : 'blue'}>{t.category}</Badge>
                     <Badge tone={t.approval_status === 'approved' ? 'green' : 'gray'}>
                       {t.approval_status}
                     </Badge>
                   </div>
-                  <p className="mt-1.5 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-700">
+                  <p className="mt-1.5 rounded-lg bg-cream-100 px-3 py-2 text-sm text-brand-800">
                     {t.body_text}
                   </p>
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-brand-600">
                     Registered with Meta as <code>{t.provider_template_name}</code>
                   </p>
                 </li>
@@ -301,12 +301,12 @@ function Stat({
   tone?: 'green' | 'red'
 }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-3.5">
-      <p className="text-xs text-gray-500">{label}</p>
+    <div className="rounded-xl border border-cream-300 bg-white p-3.5">
+      <p className="text-xs text-brand-600">{label}</p>
       <p
         className={cn(
           'mt-0.5 text-xl font-semibold tabular-nums',
-          tone === 'green' ? 'text-green-700' : tone === 'red' ? 'text-red-700' : 'text-gray-900',
+          tone === 'green' ? 'text-success-700' : tone === 'red' ? 'text-error-700' : 'text-brand-900',
         )}
       >
         {value}

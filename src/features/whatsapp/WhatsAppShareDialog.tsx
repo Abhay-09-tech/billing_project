@@ -117,7 +117,7 @@ export function WhatsAppShareDialog({
       <div className="space-y-4">
         {/* ── Number choice ─────────────────────────────────────────────── */}
         <div>
-          <p className="mb-2 text-sm font-medium text-gray-700">Send to</p>
+          <p className="mb-2 text-sm font-medium text-brand-800">Send to</p>
           <div className="space-y-2">
             {hasSavedWa && (
               <NumberOption
@@ -168,7 +168,7 @@ export function WhatsAppShareDialog({
           )}
 
           {phone.valid && (
-            <p className="mt-2 flex items-center gap-1.5 text-sm text-green-700">
+            <p className="mt-2 flex items-center gap-1.5 text-sm text-success-700">
               <Check className="h-4 w-4" />
               Will open WhatsApp for {phone.display}
             </p>
@@ -178,7 +178,7 @@ export function WhatsAppShareDialog({
         {/* ── Message preview ───────────────────────────────────────────── */}
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <p className="text-sm font-medium text-gray-700">Message</p>
+            <p className="text-sm font-medium text-brand-800">Message</p>
             <Button variant="ghost" size="sm" onClick={() => setEditing((v) => !v)}>
               <Pencil className="h-3.5 w-3.5" />
               {editing ? 'Done editing' : 'Edit message'}
@@ -194,15 +194,15 @@ export function WhatsAppShareDialog({
               className="font-mono text-sm"
             />
           ) : (
-            <div className="max-h-56 overflow-y-auto rounded-lg border border-gray-200 bg-[#e7ffdb] p-3">
-              <p className="text-sm whitespace-pre-wrap text-gray-900">{body}</p>
+            <div className="max-h-56 overflow-y-auto rounded-lg border border-cream-300 bg-[#e7ffdb] p-3">
+              <p className="text-sm whitespace-pre-wrap text-brand-900">{body}</p>
             </div>
           )}
         </div>
 
-        {hint && <p className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600">{hint}</p>}
+        {hint && <p className="rounded-lg bg-cream-100 px-3 py-2 text-xs text-brand-700">{hint}</p>}
 
-        <p className="rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-900">
+        <p className="rounded-lg bg-brand-50 px-3 py-2 text-xs text-brand-900">
           This opens WhatsApp with the message ready. <strong>You still press send</strong> in
           WhatsApp — the shop's own account sends it, so it lands as a normal chat.
         </p>
@@ -242,18 +242,18 @@ function NumberOption({
         'flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors',
         selected
           ? 'border-brand-600 bg-brand-50 ring-1 ring-brand-600'
-          : 'border-gray-300 hover:bg-gray-50',
+          : 'border-cream-300 hover:bg-cream-100',
       )}
     >
-      <span className={cn('shrink-0', selected ? 'text-brand-700' : 'text-gray-400')}>{icon}</span>
+      <span className={cn('shrink-0', selected ? 'text-brand-700' : 'text-brand-500')}>{icon}</span>
       <span className="min-w-0 flex-1">
-        <span className="block text-sm font-medium text-gray-900">{label}</span>
-        {value && <span className="block truncate text-sm tabular-nums text-gray-500">{value}</span>}
+        <span className="block text-sm font-medium text-brand-900">{label}</span>
+        {value && <span className="block truncate text-sm tabular-nums text-brand-600">{value}</span>}
       </span>
       <span
         className={cn(
           'flex h-4 w-4 shrink-0 items-center justify-center rounded-full border',
-          selected ? 'border-brand-600 bg-brand-600' : 'border-gray-300',
+          selected ? 'border-brand-600 bg-brand-600' : 'border-cream-300',
         )}
       >
         {selected && <Check className="h-3 w-3 text-white" />}

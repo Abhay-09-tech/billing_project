@@ -110,15 +110,15 @@ export default function BillingPage() {
 
       {query.data && query.data.rows.length > 0 && (
         <div className="mb-4 grid grid-cols-2 gap-3 sm:max-w-md">
-          <div className="rounded-xl border border-gray-200 bg-white p-3.5">
-            <p className="text-xs text-gray-500">Billed (this page)</p>
-            <p className="mt-0.5 text-lg font-semibold tabular-nums text-gray-900">
+          <div className="rounded-xl border border-cream-300 bg-white p-3.5">
+            <p className="text-xs text-brand-600">Billed (this page)</p>
+            <p className="mt-0.5 text-lg font-semibold tabular-nums text-brand-900">
               {formatMoney(totals.billed)}
             </p>
           </div>
-          <div className="rounded-xl border border-gray-200 bg-white p-3.5">
-            <p className="text-xs text-gray-500">Collected</p>
-            <p className="mt-0.5 text-lg font-semibold tabular-nums text-gray-900">
+          <div className="rounded-xl border border-cream-300 bg-white p-3.5">
+            <p className="text-xs text-brand-600">Collected</p>
+            <p className="mt-0.5 text-lg font-semibold tabular-nums text-brand-900">
               {formatMoney(totals.collected)}
             </p>
           </div>
@@ -155,20 +155,20 @@ export default function BillingPage() {
                   return (
                     <TR key={inv.id} onClick={() => navigate(`/billing/${inv.id}`)}>
                       <TD>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-brand-900">
                           {inv.invoice_no ?? 'Draft'}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-brand-600">
                           {inv.invoice_date ? formatDate(inv.invoice_date) : formatDate(inv.created_at)}
                         </p>
                       </TD>
                       <TD>{inv.customers?.full_name ?? '—'}</TD>
-                      <TD className="hidden tabular-nums text-gray-500 md:table-cell">
+                      <TD className="hidden tabular-nums text-brand-600 md:table-cell">
                         {formatMobile(inv.customers?.mobile)}
                       </TD>
                       <TDNum>{formatMoney(inv.grand_total)}</TDNum>
                       <TDNum
-                        className={`hidden sm:table-cell ${balance > 0 && inv.status === 'issued' ? 'text-amber-700' : 'text-gray-400'}`}
+                        className={`hidden sm:table-cell ${balance > 0 && inv.status === 'issued' ? 'text-warning-700' : 'text-brand-500'}`}
                       >
                         {inv.status === 'issued' && balance > 0 ? formatMoney(balance) : '—'}
                       </TDNum>

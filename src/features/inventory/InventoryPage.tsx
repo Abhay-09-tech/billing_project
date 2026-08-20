@@ -87,7 +87,7 @@ export default function InventoryPage() {
       {lowStock.data && lowStock.data.length > 0 && !lowOnly && (
         <button
           onClick={() => setLowOnly(true)}
-          className="mb-4 flex w-full items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-left text-sm text-amber-800 sm:w-auto"
+          className="mb-4 flex w-full items-center gap-2 rounded-lg border border-warning-600/30 bg-warning-50 px-3 py-2.5 text-left text-sm text-warning-700 sm:w-auto"
         >
           <AlertTriangle className="h-4 w-4 shrink-0" />
           {lowStock.data.length} product{lowStock.data.length === 1 ? '' : 's'} at or below the
@@ -95,7 +95,7 @@ export default function InventoryPage() {
         </button>
       )}
 
-      <div className="mb-4 flex gap-1 rounded-lg bg-gray-100 p-1 sm:inline-flex">
+      <div className="mb-4 flex gap-1 rounded-lg bg-cream-200 p-1 sm:inline-flex">
         {(
           [
             ['levels', 'Stock levels'],
@@ -110,7 +110,7 @@ export default function InventoryPage() {
             }}
             className={cn(
               'flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors sm:flex-none',
-              tab === value ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900',
+              tab === value ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-700 hover:text-brand-900',
             )}
           >
             {label}
@@ -165,10 +165,10 @@ export default function InventoryPage() {
                     return (
                       <TR key={p.id}>
                         <TD>
-                          <p className="font-medium text-gray-900">{p.name}</p>
-                          <p className="text-xs text-gray-500">{p.sku}</p>
+                          <p className="font-medium text-brand-900">{p.name}</p>
+                          <p className="text-xs text-brand-600">{p.sku}</p>
                         </TD>
-                        <TD className="hidden text-gray-600 md:table-cell">
+                        <TD className="hidden text-brand-700 md:table-cell">
                           {p.product_categories?.name ?? '—'}
                         </TD>
                         <TDNum>
@@ -180,10 +180,10 @@ export default function InventoryPage() {
                             <span className="font-medium tabular-nums">{qty}</span>
                           )}
                         </TDNum>
-                        <TDNum className="hidden text-gray-500 sm:table-cell">
+                        <TDNum className="hidden text-brand-600 sm:table-cell">
                           {p.min_stock_level}
                         </TDNum>
-                        <TDNum className="hidden text-gray-600 lg:table-cell">
+                        <TDNum className="hidden text-brand-700 lg:table-cell">
                           {cost != null ? formatMoney(cost) : '—'}
                         </TDNum>
                         <TD>
@@ -239,19 +239,19 @@ export default function InventoryPage() {
                     const delta = Number(m.qty_delta)
                     return (
                       <TR key={m.id}>
-                        <TD className="whitespace-nowrap text-gray-500">
+                        <TD className="whitespace-nowrap text-brand-600">
                           {formatDateTime(m.created_at)}
                         </TD>
                         <TD>
-                          <p className="font-medium text-gray-900">{m.products?.name ?? '—'}</p>
-                          <p className="text-xs text-gray-500">{m.products?.sku}</p>
+                          <p className="font-medium text-brand-900">{m.products?.name ?? '—'}</p>
+                          <p className="text-xs text-brand-600">{m.products?.sku}</p>
                         </TD>
-                        <TD className="text-gray-600">{REASON_LABELS[m.reason] ?? m.reason}</TD>
+                        <TD className="text-brand-700">{REASON_LABELS[m.reason] ?? m.reason}</TD>
                         <TDNum>
                           <span
                             className={cn(
                               'inline-flex items-center gap-0.5 font-medium tabular-nums',
-                              delta > 0 ? 'text-green-700' : 'text-red-700',
+                              delta > 0 ? 'text-success-700' : 'text-error-700',
                             )}
                           >
                             {delta > 0 ? (
@@ -263,7 +263,7 @@ export default function InventoryPage() {
                             {delta}
                           </span>
                         </TDNum>
-                        <TD className="hidden max-w-xs truncate text-gray-500 lg:table-cell">
+                        <TD className="hidden max-w-xs truncate text-brand-600 lg:table-cell">
                           {m.note ?? '—'}
                         </TD>
                       </TR>

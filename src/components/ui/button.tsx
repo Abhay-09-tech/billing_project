@@ -12,15 +12,18 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants: Record<Variant, string> = {
+  // Hover deepens one step of the same ramp rather than shifting hue, so the
+  // change reads as pressure rather than as a different button.
   primary:
-    'bg-brand-700 text-white hover:bg-brand-800 focus-visible:outline-brand-700 disabled:bg-brand-700/50',
+    'bg-brand-700 text-white shadow-sm hover:bg-brand-800 active:bg-brand-900 focus-visible:outline-brand-700 disabled:bg-brand-700/40 disabled:shadow-none',
   secondary:
-    'bg-brand-50 text-brand-800 hover:bg-brand-100 focus-visible:outline-brand-700 disabled:opacity-50',
+    'bg-brand-50 text-brand-800 hover:bg-brand-100 active:bg-brand-200 focus-visible:outline-brand-700 disabled:opacity-50',
   outline:
-    'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus-visible:outline-brand-700 disabled:opacity-50',
-  ghost: 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50',
+    'border border-cream-300 bg-cream-50 text-brand-800 hover:border-brand-300 hover:bg-brand-50 focus-visible:outline-brand-700 disabled:opacity-50',
+  ghost:
+    'text-brand-700 hover:bg-brand-50 hover:text-brand-900 focus-visible:outline-brand-700 disabled:opacity-50',
   danger:
-    'bg-red-600 text-white hover:bg-red-700 focus-visible:outline-red-600 disabled:bg-red-600/50',
+    'bg-error-600 text-white shadow-sm hover:bg-error-700 focus-visible:outline-error-600 disabled:bg-error-600/40 disabled:shadow-none',
 }
 
 // Touch-friendly heights (≥44px for md/lg) per brief §30/§31.

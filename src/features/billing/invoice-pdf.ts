@@ -168,7 +168,7 @@ export function buildInvoicePdf(input: InvoicePdfInput): jsPDF {
       rs(item.line_total),
     ]),
     theme: 'grid',
-    headStyles: { fillColor: [15, 118, 110], textColor: 255, fontSize: 8, fontStyle: 'bold' },
+    headStyles: { fillColor: [111, 78, 55], textColor: 255, fontSize: 8, fontStyle: 'bold' },
     bodyStyles: { fontSize: 8, textColor: 30 },
     columnStyles: {
       0: { cellWidth: 8, halign: 'center' },

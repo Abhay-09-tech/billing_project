@@ -126,7 +126,7 @@ export function InvoiceActions({
       {can(PERMS.whatsappSend) && (
         <Button
           onClick={() => setWaOpen(true)}
-          className={layout === 'stacked' ? 'w-full justify-start bg-[#25D366] hover:bg-[#1da851]' : 'bg-[#25D366] hover:bg-[#1da851]'}
+          className={layout === 'stacked' ? 'w-full justify-start bg-brand-700 hover:bg-brand-800' : 'bg-brand-700 hover:bg-brand-800'}
         >
           <MessageCircle className="h-4 w-4" />
           Send on WhatsApp

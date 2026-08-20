@@ -42,15 +42,15 @@ export function InvoicePrint({
 
   return (
     <div id="invoice-print" className="hidden print:block">
-      <div className="mx-auto max-w-3xl bg-white p-6 text-[10.5pt] leading-snug text-black">
+      <div className="mx-auto max-w-3xl bg-white p-6 text-[10.5pt] leading-snug text-[#242424]">
         {/* ── Shop header ────────────────────────────────────────────────── */}
-        <div className="flex items-start justify-between gap-6 border-b-2 border-black pb-3">
+        <div className="flex items-start justify-between gap-6 border-b-[3px] border-[#6F4E37] pb-3">
           <div className="flex items-start gap-3">
             {profile.logo_data_url && (
               <img src={profile.logo_data_url} alt="" className="h-16 w-16 object-contain" />
             )}
             <div>
-              <h1 className="text-xl font-bold">{shopName}</h1>
+              <h1 className="text-xl font-bold text-[#3B2418]">{shopName}</h1>
               {profile.address && (
                 <p className="mt-0.5 whitespace-pre-line text-[9.5pt]">{profile.address}</p>
               )}
@@ -64,7 +64,7 @@ export function InvoicePrint({
           </div>
 
           <div className="shrink-0 text-right">
-            <p className="text-lg font-bold tracking-wide">TAX INVOICE</p>
+            <p className="text-lg font-bold tracking-wide text-[#6F4E37]">TAX INVOICE</p>
             <table className="mt-1.5 ml-auto text-[9.5pt]">
               <tbody>
                 <tr>
@@ -89,8 +89,8 @@ export function InvoicePrint({
         </div>
 
         {/* ── Customer ───────────────────────────────────────────────────── */}
-        <div className="mt-3 border-b border-gray-400 pb-3">
-          <p className="text-[9pt] font-bold tracking-wide">BILL TO</p>
+        <div className="mt-3 border-b border-brand-400 pb-3">
+          <p className="text-[9pt] font-bold tracking-wide text-[#6F4E37]">BILL TO</p>
           <div className="mt-1 flex items-start justify-between gap-6">
             <div>
               <p className="text-[12pt] font-semibold">{invoice.customers?.full_name}</p>
@@ -129,7 +129,7 @@ export function InvoicePrint({
         {/* ── Lines ──────────────────────────────────────────────────────── */}
         <table className="mt-3 w-full border-collapse text-[9.5pt]">
           <thead>
-            <tr className="border-y border-black">
+            <tr className="border-y border-[#6F4E37] bg-[#F7F1E8]">
               <th className="py-1.5 pr-1 text-left font-semibold">#</th>
               <th className="py-1.5 pr-2 text-left font-semibold">Description</th>
               <th className="py-1.5 pr-2 text-left font-semibold">SKU / HSN</th>
@@ -143,7 +143,7 @@ export function InvoicePrint({
           </thead>
           <tbody>
             {items.map((item, index) => (
-              <tr key={item.id} className="border-b border-gray-300">
+              <tr key={item.id} className="border-b border-cream-300">
                 <td className="py-1.5 pr-1 align-top">{index + 1}</td>
                 <td className="py-1.5 pr-2 align-top">{item.description}</td>
                 <td className="py-1.5 pr-2 align-top text-[8.5pt]">{item.hsn_code ?? '—'}</td>
@@ -238,7 +238,7 @@ export function InvoicePrint({
                   <td className="py-0.5 text-right">{formatMoney(invoice.round_off)}</td>
                 </tr>
               )}
-              <tr className="border-y border-black text-[12pt] font-bold">
+              <tr className="border-y border-[#6F4E37] text-[12pt] font-bold text-[#3B2418]">
                 <td className="py-1.5">Grand Total</td>
                 <td className="py-1.5 text-right">{formatMoney(invoice.grand_total)}</td>
               </tr>
@@ -260,19 +260,19 @@ export function InvoicePrint({
         </p>
 
         {/* ── Footer ─────────────────────────────────────────────────────── */}
-        <div className="mt-6 flex items-end justify-between gap-6 border-t border-gray-400 pt-3 text-[8.5pt]">
+        <div className="mt-6 flex items-end justify-between gap-6 border-t border-brand-400 pt-3 text-[8.5pt]">
           <div className="max-w-md">
             <p className="font-semibold">Thank you for choosing {shopName}.</p>
-            <ul className="mt-1 space-y-0.5 text-gray-700">
+            <ul className="mt-1 space-y-0.5 text-brand-800">
               <li>· Spectacles made to prescription are not returnable.</li>
               <li>· Please check the fit and vision before leaving the counter.</li>
               <li>· Frame warranty is as per manufacturer terms; bring this invoice for any claim.</li>
               <li>· Goods once sold are not exchangeable after 7 days.</li>
             </ul>
-            <p className="mt-1.5 text-gray-500">This is a computer-generated invoice.</p>
+            <p className="mt-1.5 text-brand-600">This is a computer-generated invoice.</p>
           </div>
           <div className="shrink-0 text-center">
-            <div className="mt-10 border-t border-black px-6 pt-1">
+            <div className="mt-10 border-t border-[#6F4E37] px-6 pt-1">
               For {shopName}
               <br />
               Authorised Signatory

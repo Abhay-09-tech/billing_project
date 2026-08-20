@@ -163,10 +163,10 @@ export function NewPrescriptionDialog({ open, onOpenChange, customerId, onCreate
         </div>
 
         {/* Power grid — the fast path staff use every day. */}
-        <div className="overflow-x-auto rounded-lg border border-gray-200">
+        <div className="overflow-x-auto rounded-lg border border-cream-300">
           <table className="w-full min-w-[34rem]">
-            <thead className="bg-gray-50">
-              <tr className="text-xs font-medium text-gray-500">
+            <thead className="bg-cream-100">
+              <tr className="text-xs font-medium text-brand-600">
                 <th className="w-12 px-2 py-2 text-left">Eye</th>
                 <th className="px-2 py-2 text-left">SPH</th>
                 <th className="px-2 py-2 text-left">CYL</th>
@@ -177,8 +177,8 @@ export function NewPrescriptionDialog({ open, onOpenChange, customerId, onCreate
             </thead>
             <tbody>
               {(['od', 'os'] as const).map((eye) => (
-                <tr key={eye} className="border-t border-gray-100">
-                  <td className="px-2 py-2 text-sm font-semibold text-gray-600">{eye.toUpperCase()}</td>
+                <tr key={eye} className="border-t border-cream-200">
+                  <td className="px-2 py-2 text-sm font-semibold text-brand-700">{eye.toUpperCase()}</td>
                   <td className="px-2 py-2">
                     <Input type="number" step="0.25" min={-30} max={30} inputMode="decimal" placeholder="0.00" aria-label={`${eye} sphere`} {...form.register(`${eye}_sph`)} />
                   </td>
@@ -202,7 +202,7 @@ export function NewPrescriptionDialog({ open, onOpenChange, customerId, onCreate
           </table>
         </div>
 
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-brand-600">
           Enter monocular PD per eye where known — progressive lenses need it. Otherwise use the binocular PD below.
         </p>
 
@@ -222,10 +222,10 @@ export function NewPrescriptionDialog({ open, onOpenChange, customerId, onCreate
         </button>
 
         {showAdvanced && (
-          <div className="space-y-3 rounded-lg border border-gray-200 p-3">
+          <div className="space-y-3 rounded-lg border border-cream-300 p-3">
             {(['od', 'os'] as const).map((eye) => (
               <div key={eye} className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-                <p className="col-span-2 self-center text-sm font-semibold text-gray-600 sm:col-span-1">
+                <p className="col-span-2 self-center text-sm font-semibold text-brand-700 sm:col-span-1">
                   {eye.toUpperCase()}
                 </p>
                 <FormField label="Prism H" htmlFor={`${eye}-ph`}>
@@ -266,7 +266,7 @@ export function NewPrescriptionDialog({ open, onOpenChange, customerId, onCreate
         </FormField>
 
         <FormField label="Prescription photo" hint="Optional — photograph the paper prescription with the camera">
-          <label className="flex min-h-touch cursor-pointer items-center gap-2 rounded-lg border border-dashed border-gray-300 px-3 py-2.5 text-sm text-gray-600 hover:border-brand-400 hover:bg-brand-50/40">
+          <label className="flex min-h-touch cursor-pointer items-center gap-2 rounded-lg border border-dashed border-cream-300 px-3 py-2.5 text-sm text-brand-700 hover:border-brand-400 hover:bg-brand-50/40">
             <Upload className="h-4 w-4" />
             {file ? file.name : 'Take photo or choose file'}
             <input
@@ -287,7 +287,7 @@ export function NewPrescriptionDialog({ open, onOpenChange, customerId, onCreate
         </FormField>
 
         {formError && (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+          <p className="rounded-lg bg-error-50 px-3 py-2 text-sm text-error-700" role="alert">
             {formError}
           </p>
         )}

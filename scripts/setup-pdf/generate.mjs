@@ -14,7 +14,7 @@ import { writeFileSync } from 'node:fs'
 const PROJECT_REF = process.env.POV_PROJECT_REF ?? 'YOUR-PROJECT-REF'
 const PROJECT_URL = process.env.POV_PROJECT_URL ?? 'https://YOUR-PROJECT-REF.supabase.co'
 const LAN_URL = process.env.POV_LAN_URL ?? 'http://localhost:5173/'
-const OUT = process.env.POV_PDF_OUT ?? 'Perfect-Optical-Vision-Setup-Queries.pdf'
+const OUT = process.env.POV_PDF_OUT ?? 'Perfect-Vision-Setup-Queries.pdf'
 
 const doc = new jsPDF({ unit: 'mm', format: 'a4' })
 const W = doc.internal.pageSize.getWidth()
@@ -22,7 +22,7 @@ const H = doc.internal.pageSize.getHeight()
 const M = 16
 const CONTENT = W - M * 2
 
-const TEAL = [15, 118, 110]
+const COFFEE = [111, 78, 55]
 const INK = [17, 24, 39]
 const MUTED = [90, 98, 110]
 const RULE = [206, 212, 218]
@@ -35,7 +35,7 @@ let page = 0
 
 function footer() {
   doc.setFont('helvetica', 'normal').setFontSize(7.5).setTextColor(...MUTED)
-  doc.text('Perfect Optical Vision - Setup & Reference', M, H - 8)
+  doc.text('Perfect Vision Billing Software - Setup & Reference', M, H - 8)
   doc.text('Page ' + page, W - M, H - 8, { align: 'right' })
 }
 
@@ -53,10 +53,10 @@ function need(mm) {
 function h1(text) {
   need(16)
   y += 3
-  doc.setFont('helvetica', 'bold').setFontSize(14).setTextColor(...TEAL)
+  doc.setFont('helvetica', 'bold').setFontSize(14).setTextColor(...COFFEE)
   doc.text(text, M, y)
   y += 2.5
-  doc.setDrawColor(...TEAL).setLineWidth(0.5).line(M, y, M + CONTENT, y)
+  doc.setDrawColor(...COFFEE).setLineWidth(0.5).line(M, y, M + CONTENT, y)
   y += 6
 }
 
@@ -156,13 +156,13 @@ function kv(rows) {
 page = 1
 y = M
 
-doc.setFillColor(...TEAL).rect(0, 0, W, 42, 'F')
+doc.setFillColor(...COFFEE).rect(0, 0, W, 42, 'F')
 doc.setFont('helvetica', 'bold').setFontSize(21).setTextColor(255)
-doc.text('Perfect Optical Vision', M, 20)
+doc.text('Perfect Vision', M, 20)
 doc.setFont('helvetica', 'normal').setFontSize(11)
-doc.text('Setup & Reference - Database Queries', M, 29)
+doc.text('Billing Software', M, 29)
 doc.setFontSize(8.5)
-doc.text('Optical retail management, billing and WhatsApp', M, 36)
+doc.text('SMART BILLING. CLEAR VISION.   |   Setup & Reference', M, 36)
 y = 52
 
 para(
@@ -189,7 +189,7 @@ for (const [label, link] of [
   need(5)
   doc.setFont('helvetica', 'bold').setFontSize(9).setTextColor(...INK)
   doc.text(label, M, y)
-  doc.setFont('courier', 'normal').setFontSize(8).setTextColor(...TEAL)
+  doc.setFont('courier', 'normal').setFontSize(8).setTextColor(...COFFEE)
   doc.text(link, M + 26, y)
   y += 5
 }

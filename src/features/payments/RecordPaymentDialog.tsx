@@ -144,7 +144,7 @@ export function RecordPaymentDialog({
                   'min-h-touch rounded-lg border px-2 py-2 text-sm font-medium transition-colors',
                   method === m.value
                     ? 'border-brand-600 bg-brand-50 text-brand-800'
-                    : 'border-gray-300 text-gray-600 hover:bg-gray-50',
+                    : 'border-cream-300 text-brand-700 hover:bg-cream-100',
                 )}
               >
                 {m.label}
@@ -168,22 +168,22 @@ export function RecordPaymentDialog({
         </FormField>
 
         {overBalance && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm">
-            <p className="font-medium text-amber-900">
+          <div className="rounded-lg border border-warning-600/30 bg-warning-50 p-3 text-sm">
+            <p className="font-medium text-warning-700">
               This is {formatMoney(value - balance)} more than the balance due.
             </p>
             {canOverpay ? (
-              <label className="mt-2 flex items-start gap-2 text-amber-900">
+              <label className="mt-2 flex items-start gap-2 text-warning-700">
                 <input
                   type="checkbox"
                   checked={allowAdvance}
                   onChange={(e) => setAllowAdvance(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-amber-400 text-brand-700"
+                  className="mt-0.5 h-4 w-4 rounded border-warning-600/50 text-brand-700"
                 />
                 Accept the extra as an advance
               </label>
             ) : (
-              <p className="mt-1 text-amber-800">
+              <p className="mt-1 text-warning-700">
                 Only an administrator can accept more than the balance. Reduce the amount, or ask
                 an admin.
               </p>
@@ -191,7 +191,7 @@ export function RecordPaymentDialog({
           </div>
         )}
 
-        <p className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600">
+        <p className="rounded-lg bg-cream-100 px-3 py-2 text-xs text-brand-700">
           Payments are permanent. A mistake is corrected with a refund entry, never by deleting —
           so the cash book always reconciles.
         </p>

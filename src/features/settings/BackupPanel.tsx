@@ -80,9 +80,9 @@ export function BackupPanel() {
       />
 
       <div className="space-y-4 p-4 sm:p-5">
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">
+        <div className="rounded-lg border border-brand-200 bg-brand-50 p-3 text-sm text-brand-900">
           <p className="font-medium">Your data is backed up in three places.</p>
-          <ol className="mt-1.5 space-y-1 text-blue-800">
+          <ol className="mt-1.5 space-y-1 text-brand-800">
             <li>
               <strong>1. Supabase daily backups</strong> — automatic on the Pro plan. This is the
               one that matters most; the free plan does not include it.
@@ -96,33 +96,33 @@ export function BackupPanel() {
               you rewind the database to any moment.
             </li>
           </ol>
-          <p className="mt-2 text-blue-800">
+          <p className="mt-2 text-brand-800">
             A backup that lives only inside the same account is not really a backup. The monthly
             download is what protects you if the Supabase account itself is ever lost.
           </p>
         </div>
 
         <div>
-          <p className="mb-2 text-sm font-medium text-gray-700">Export a single table</p>
+          <p className="mb-2 text-sm font-medium text-brand-800">Export a single table</p>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {EXPORTABLE_TABLES.map(({ table, label }) => (
               <button
                 key={table}
                 onClick={() => void exportOne(table, label)}
                 disabled={Boolean(busy)}
-                className="flex min-h-touch items-center justify-between gap-2 rounded-lg border border-gray-200 px-3 py-2.5 text-left text-sm text-gray-700 transition-colors hover:border-brand-300 hover:bg-brand-50/40 disabled:opacity-50"
+                className="flex min-h-touch items-center justify-between gap-2 rounded-lg border border-cream-300 px-3 py-2.5 text-left text-sm text-brand-800 transition-colors hover:border-brand-300 hover:bg-brand-50/40 disabled:opacity-50"
               >
                 <span className="flex items-center gap-2">
-                  <Database className="h-4 w-4 text-gray-400" />
+                  <Database className="h-4 w-4 text-brand-500" />
                   {label}
                 </span>
                 {busy === table ? (
-                  <span className="flex items-center gap-1 text-xs text-gray-500">
+                  <span className="flex items-center gap-1 text-xs text-brand-600">
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
                     {progress}
                   </span>
                 ) : (
-                  <Download className="h-4 w-4 text-gray-400" />
+                  <Download className="h-4 w-4 text-brand-500" />
                 )}
               </button>
             ))}
@@ -130,10 +130,10 @@ export function BackupPanel() {
         </div>
 
         {busy === '__all__' && progress && (
-          <p className="text-sm text-gray-600">Exporting {progress}…</p>
+          <p className="text-sm text-brand-700">Exporting {progress}…</p>
         )}
 
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-brand-600">
           Files open directly in Excel. Financial records (invoices, payments, stock movements)
           are exported exactly as stored — this is a copy, never a way to change them.
         </p>

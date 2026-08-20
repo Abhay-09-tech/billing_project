@@ -35,18 +35,18 @@ export function Dialog({ open, onOpenChange, title, description, children, size 
             'flex flex-col',
           )}
         >
-          <div className="flex items-start justify-between gap-4 border-b border-gray-100 px-4 py-3 sm:px-5">
+          <div className="flex items-start justify-between gap-4 border-b border-cream-200 px-4 py-3 sm:px-5">
             <div>
-              <RadixDialog.Title className="text-base font-semibold text-gray-900">{title}</RadixDialog.Title>
+              <RadixDialog.Title className="text-base font-semibold text-brand-900">{title}</RadixDialog.Title>
               {description && (
-                <RadixDialog.Description className="mt-0.5 text-sm text-gray-500">
+                <RadixDialog.Description className="mt-0.5 text-sm text-brand-600">
                   {description}
                 </RadixDialog.Description>
               )}
             </div>
             <RadixDialog.Close asChild>
               <button
-                className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                className="rounded-lg p-2 text-brand-500 hover:bg-cream-200 hover:text-brand-700"
                 aria-label="Close"
               >
                 <X className="h-5 w-5" />
@@ -87,8 +87,8 @@ export function ConfirmDialog({
       <RadixAlert.Portal>
         <RadixAlert.Overlay className="fixed inset-0 z-40 bg-black/40" />
         <RadixAlert.Content className="fixed top-1/2 left-1/2 z-50 w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white p-5 shadow-xl focus:outline-none">
-          <RadixAlert.Title className="text-base font-semibold text-gray-900">{title}</RadixAlert.Title>
-          <RadixAlert.Description className="mt-2 text-sm text-gray-600">
+          <RadixAlert.Title className="text-base font-semibold text-brand-900">{title}</RadixAlert.Title>
+          <RadixAlert.Description className="mt-2 text-sm text-brand-700">
             {description}
           </RadixAlert.Description>
           <div className="mt-5 flex justify-end gap-2">

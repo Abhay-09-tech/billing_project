@@ -57,22 +57,22 @@ export default function CustomerProfilePage() {
     <>
       <Link
         to="/customers"
-        className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-800"
+        className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-800"
       >
         <ArrowLeft className="h-4 w-4" />
         Customers
       </Link>
 
       {/* ── Identity + summary ───────────────────────────────────────────── */}
-      <div className="mb-5 rounded-xl border border-gray-200 bg-white p-4 sm:p-5">
+      <div className="mb-5 rounded-xl border border-cream-300 bg-white p-4 sm:p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
-            <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">{customer.full_name}</h1>
-            <p className="mt-0.5 text-sm text-gray-500">
+            <h1 className="text-xl font-semibold text-brand-900 sm:text-2xl">{customer.full_name}</h1>
+            <p className="mt-0.5 text-sm text-brand-600">
               {customer.customer_code}
               {customer.city ? ` · ${customer.city}` : ''}
             </p>
-            {addresses[0] && <p className="mt-1 text-sm text-gray-600">{addresses[0].address_line}</p>}
+            {addresses[0] && <p className="mt-1 text-sm text-brand-700">{addresses[0].address_line}</p>}
           </div>
           <div className="flex flex-wrap gap-2">
             <a href={`tel:+91${customer.mobile}`}>
@@ -85,7 +85,7 @@ export default function CustomerProfilePage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="border-[#25D366] text-[#128C7E] hover:bg-[#25D366]/10"
+                className="border-brand-300 text-brand-700 hover:bg-brand-50"
                 onClick={() => setWaOpen(true)}
               >
                 <MessageCircle className="h-4 w-4" />
@@ -101,7 +101,7 @@ export default function CustomerProfilePage() {
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-3 border-t border-gray-100 pt-4 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-4 grid grid-cols-2 gap-3 border-t border-cream-200 pt-4 sm:grid-cols-3 lg:grid-cols-6">
           <Summary label="Total orders" value={totals.totalOrders} />
           <Summary label="Total purchases" value={formatMoney(totals.totalPurchases)} />
           <Summary label="Total paid" value={formatMoney(totals.totalPaid)} />
@@ -139,18 +139,18 @@ export default function CustomerProfilePage() {
             ) : (
               <div className="grid gap-4 lg:grid-cols-2">
                 <div>
-                  <p className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                  <p className="mb-2 text-xs font-semibold tracking-wide text-brand-600 uppercase">
                     Current prescription
                   </p>
                   {currentRx ? (
                     <RxCard rx={currentRx} />
                   ) : (
-                    <p className="text-sm text-gray-500">All prescriptions have been voided.</p>
+                    <p className="text-sm text-brand-600">All prescriptions have been voided.</p>
                   )}
                 </div>
                 {history.length > 0 && (
                   <div>
-                    <p className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                    <p className="mb-2 text-xs font-semibold tracking-wide text-brand-600 uppercase">
                       History ({history.length})
                     </p>
                     <div className="space-y-2">
@@ -183,8 +183,8 @@ export default function CustomerProfilePage() {
               <TBody>
                 {orders.map((o) => (
                   <TR key={o.id} onClick={() => navigate(`/orders/${o.id}`)}>
-                    <TD className="font-medium text-gray-900">{o.order_code}</TD>
-                    <TD className="whitespace-nowrap text-gray-500">{formatDate(o.created_at)}</TD>
+                    <TD className="font-medium text-brand-900">{o.order_code}</TD>
+                    <TD className="whitespace-nowrap text-brand-600">{formatDate(o.created_at)}</TD>
                     <TDNum>{formatMoney(o.grand_total)}</TDNum>
                     <TD>
                       <OrderStatusBadge status={o.status} />
@@ -214,10 +214,10 @@ export default function CustomerProfilePage() {
               <TBody>
                 {invoices.map((i) => (
                   <TR key={i.id} onClick={() => navigate(`/billing/${i.id}`)}>
-                    <TD className="font-medium text-gray-900">
+                    <TD className="font-medium text-brand-900">
                       {i.invoice_no ?? <InvoiceStatusBadge status={i.status} />}
                     </TD>
-                    <TD className="whitespace-nowrap text-gray-500">
+                    <TD className="whitespace-nowrap text-brand-600">
                       {i.invoice_date ? formatDate(i.invoice_date) : formatDate(i.created_at)}
                     </TD>
                     <TDNum>{formatMoney(i.grand_total)}</TDNum>
@@ -253,10 +253,10 @@ export default function CustomerProfilePage() {
               <TBody>
                 {payments.map((p) => (
                   <TR key={p.id}>
-                    <TD className="font-medium text-gray-900">{p.payment_code}</TD>
-                    <TD className="whitespace-nowrap text-gray-500">{formatDate(p.paid_at)}</TD>
-                    <TD className="capitalize text-gray-600">{p.method.replace('_', ' ')}</TD>
-                    <TDNum className={p.direction < 0 ? 'text-red-600' : ''}>
+                    <TD className="font-medium text-brand-900">{p.payment_code}</TD>
+                    <TD className="whitespace-nowrap text-brand-600">{formatDate(p.paid_at)}</TD>
+                    <TD className="capitalize text-brand-700">{p.method.replace('_', ' ')}</TD>
+                    <TDNum className={p.direction < 0 ? 'text-error-600' : ''}>
                       {p.direction < 0 ? '−' : ''}
                       {formatMoney(p.amount)}
                     </TDNum>
@@ -288,8 +288,8 @@ export default function CustomerProfilePage() {
               <TBody>
                 {whatsapp.map((msg) => (
                   <TR key={msg.id}>
-                    <TD className="max-w-xs truncate text-gray-700">{msg.rendered_body ?? '—'}</TD>
-                    <TD className="whitespace-nowrap text-gray-500">{formatDate(msg.created_at)}</TD>
+                    <TD className="max-w-xs truncate text-brand-800">{msg.rendered_body ?? '—'}</TD>
+                    <TD className="whitespace-nowrap text-brand-600">{formatDate(msg.created_at)}</TD>
                     <TD>
                       <WaStatusBadge status={msg.status} />
                     </TD>
@@ -328,10 +328,10 @@ export default function CustomerProfilePage() {
 function Summary({ label, value, tone }: { label: string; value: string | number; tone?: 'amber' }) {
   return (
     <div>
-      <p className="text-xs text-gray-500">{label}</p>
+      <p className="text-xs text-brand-600">{label}</p>
       <p
         className={`mt-0.5 text-sm font-semibold tabular-nums sm:text-base ${
-          tone === 'amber' ? 'text-amber-700' : 'text-gray-900'
+          tone === 'amber' ? 'text-warning-700' : 'text-brand-900'
         }`}
       >
         {value}

@@ -107,7 +107,7 @@ export default function DashboardPage() {
           {m.low_stock_count > 0 && (
             <button
               onClick={() => navigate('/inventory?filter=low')}
-              className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800"
+              className="flex items-center gap-2 rounded-lg border border-warning-600/30 bg-warning-50 px-3 py-2 text-sm text-warning-700"
             >
               <AlertTriangle className="h-4 w-4" />
               {m.low_stock_count} product{m.low_stock_count === 1 ? '' : 's'} at or below minimum stock
@@ -116,7 +116,7 @@ export default function DashboardPage() {
           {m.wa_failed_today > 0 && (
             <button
               onClick={() => navigate('/whatsapp?status=failed')}
-              className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+              className="flex items-center gap-2 rounded-lg border border-error-600/30 bg-error-50 px-3 py-2 text-sm text-error-700"
             >
               <AlertTriangle className="h-4 w-4" />
               {m.wa_failed_today} WhatsApp message{m.wa_failed_today === 1 ? '' : 's'} failed today
@@ -161,9 +161,9 @@ export default function DashboardPage() {
             <TBody>
               {queue.data!.map((order) => (
                 <TR key={order.id} onClick={() => navigate(`/orders/${order.id}`)}>
-                  <TD className="font-medium text-gray-900">{order.order_code}</TD>
+                  <TD className="font-medium text-brand-900">{order.order_code}</TD>
                   <TD>{order.customers?.full_name ?? '—'}</TD>
-                  <TD className="hidden text-gray-500 sm:table-cell">{formatMobile(order.customers?.mobile)}</TD>
+                  <TD className="hidden text-brand-600 sm:table-cell">{formatMobile(order.customers?.mobile)}</TD>
                   <TDNum>{formatMoney(order.grand_total)}</TDNum>
                   <TD>
                     <PaymentStatusBadge grandTotal={Number(order.grand_total)} amountPaid={Number(order.advance_amount)} />
@@ -171,7 +171,7 @@ export default function DashboardPage() {
                   <TD>
                     <OrderStatusBadge status={order.status} />
                   </TD>
-                  <TD className="hidden text-gray-500 lg:table-cell">
+                  <TD className="hidden text-brand-600 lg:table-cell">
                     {order.expected_delivery_date ? formatDate(order.expected_delivery_date) : '—'}
                   </TD>
                 </TR>
@@ -190,7 +190,7 @@ export default function DashboardPage() {
               <select
                 value={preset}
                 onChange={(e) => setPreset(e.target.value as RangePreset)}
-                className="h-9 rounded-lg border border-gray-300 bg-white px-2 text-sm focus:border-brand-600 focus:outline-none"
+                className="h-9 rounded-lg border border-cream-300 bg-white px-2 text-sm focus:border-brand-600 focus:outline-none"
                 aria-label="Date range"
               >
                 {(['today', 'yesterday', 'last7', 'last30', 'this_month', 'prev_month'] as RangePreset[]).map((p) => (
@@ -230,7 +230,7 @@ function SalesTable({ rows }: { rows: Array<{ day: string; orders_count: number;
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-3 border-b border-gray-100 px-4 py-4 sm:grid-cols-4 sm:px-5">
+      <div className="grid grid-cols-2 gap-3 border-b border-cream-200 px-4 py-4 sm:grid-cols-4 sm:px-5">
         <MiniStat label="Orders" value={totals.orders} />
         <MiniStat label="Bills" value={totals.invoices} />
         <MiniStat label="Sales" value={formatMoneyWhole(totals.gross)} />
@@ -254,7 +254,7 @@ function SalesTable({ rows }: { rows: Array<{ day: string; orders_count: number;
               <TDNum>{r.orders_count}</TDNum>
               <TDNum>{r.invoices_count}</TDNum>
               <TDNum>{formatMoney(r.gross_sales)}</TDNum>
-              <TDNum className="hidden text-gray-500 sm:table-cell">{formatMoney(r.gst)}</TDNum>
+              <TDNum className="hidden text-brand-600 sm:table-cell">{formatMoney(r.gst)}</TDNum>
               <TDNum>{formatMoney(r.collected)}</TDNum>
             </TR>
           ))}
@@ -267,8 +267,8 @@ function SalesTable({ rows }: { rows: Array<{ day: string; orders_count: number;
 function MiniStat({ label, value }: { label: string; value: string | number }) {
   return (
     <div>
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className="mt-0.5 text-lg font-semibold text-gray-900 tabular-nums">{value}</p>
+      <p className="text-xs text-brand-600">{label}</p>
+      <p className="mt-0.5 text-lg font-semibold text-brand-900 tabular-nums">{value}</p>
     </div>
   )
 }
@@ -288,7 +288,7 @@ function QuickAction({
   return (
     <button
       onClick={onClick}
-      className="flex min-h-touch flex-col items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-2 py-3.5 text-center text-xs font-medium text-gray-700 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-800 sm:text-sm"
+      className="flex min-h-touch flex-col items-center justify-center gap-1.5 rounded-xl border border-cream-300 bg-white px-2 py-3.5 text-center text-xs font-medium text-brand-800 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-800 sm:text-sm"
     >
       <Icon className="h-5 w-5 text-brand-700" aria-hidden />
       {label}
@@ -297,10 +297,18 @@ function QuickAction({
 }
 
 const statTones = {
-  gray: 'text-gray-400',
-  teal: 'text-brand-600',
-  green: 'text-green-600',
-  amber: 'text-amber-600',
+  gray: 'text-brand-500',
+  teal: 'text-brand-700',
+  green: 'text-success-600',
+  amber: 'text-warning-600',
+} as const
+
+/** Tinted chip behind each tile icon, matching its tone. */
+const statChips = {
+  gray: 'bg-cream-200',
+  teal: 'bg-brand-100',
+  green: 'bg-success-50',
+  amber: 'bg-warning-50',
 } as const
 
 function Stat({
@@ -323,16 +331,24 @@ function Stat({
     <Wrapper
       onClick={onClick}
       className={cn(
-        'rounded-xl border border-gray-200 bg-white p-3.5 text-left sm:p-4',
-        onClick && 'transition-colors hover:border-brand-300 hover:bg-brand-50/40',
+        'rounded-xl border border-cream-300 bg-white p-3.5 text-left shadow-sm shadow-brand-900/[0.03] sm:p-4',
+        onClick &&
+          'transition-all hover:border-brand-300 hover:shadow-md hover:shadow-brand-900/[0.06]',
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="text-xs text-gray-500 sm:text-sm">{label}</p>
-        <Icon className={cn('h-4 w-4 shrink-0', statTones[tone])} aria-hidden />
+        <p className="text-xs text-brand-600 sm:text-sm">{label}</p>
+        <span
+          className={cn(
+            'flex h-7 w-7 shrink-0 items-center justify-center rounded-lg',
+            statChips[tone],
+          )}
+        >
+          <Icon className={cn('h-4 w-4', statTones[tone])} aria-hidden />
+        </span>
       </div>
-      <p className="mt-1 text-xl font-semibold text-gray-900 tabular-nums sm:text-2xl">{value}</p>
-      {sub && <p className="mt-0.5 text-xs text-gray-500">{sub}</p>}
+      <p className="mt-1 text-xl font-semibold text-brand-900 tabular-nums sm:text-2xl">{value}</p>
+      {sub && <p className="mt-0.5 text-xs text-brand-600">{sub}</p>}
     </Wrapper>
   )
 }

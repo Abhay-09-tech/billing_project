@@ -124,10 +124,10 @@ export function SetupChecklist({ onGoToTab }: { onGoToTab: (tab: string) => void
 
   return (
     <Card>
-      <CardHeader title="First-time setup" actions={<span className="text-sm text-gray-500">{doneCount} of {steps.length} done</span>} />
+      <CardHeader title="First-time setup" actions={<span className="text-sm text-brand-600">{doneCount} of {steps.length} done</span>} />
 
       <div className="p-4 sm:p-5">
-        <div className="mb-4 h-2 overflow-hidden rounded-full bg-gray-100">
+        <div className="mb-4 h-2 overflow-hidden rounded-full bg-cream-200">
           <div
             className="h-full rounded-full bg-brand-600 transition-all"
             style={{ width: `${(doneCount / steps.length) * 100}%` }}
@@ -135,7 +135,7 @@ export function SetupChecklist({ onGoToTab }: { onGoToTab: (tab: string) => void
         </div>
 
         {blockers.length > 0 ? (
-          <p className="mb-4 flex items-start gap-2 rounded-lg bg-amber-50 px-3 py-2.5 text-sm text-amber-900">
+          <p className="mb-4 flex items-start gap-2 rounded-lg bg-warning-50 px-3 py-2.5 text-sm text-warning-700">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>
               Finish the {blockers.length} highlighted step{blockers.length === 1 ? '' : 's'} before
@@ -143,7 +143,7 @@ export function SetupChecklist({ onGoToTab }: { onGoToTab: (tab: string) => void
             </span>
           </p>
         ) : (
-          <p className="mb-4 flex items-start gap-2 rounded-lg bg-green-50 px-3 py-2.5 text-sm text-green-900">
+          <p className="mb-4 flex items-start gap-2 rounded-lg bg-success-50 px-3 py-2.5 text-sm text-success-700">
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
             <span>Setup is complete. The system is ready for real billing.</span>
           </p>
@@ -156,27 +156,27 @@ export function SetupChecklist({ onGoToTab }: { onGoToTab: (tab: string) => void
               className={cn(
                 'flex flex-wrap items-start gap-3 rounded-lg border p-3',
                 step.done
-                  ? 'border-gray-200 bg-gray-50/60'
+                  ? 'border-cream-300 bg-cream-100/60'
                   : step.blocking
-                    ? 'border-amber-200 bg-amber-50/40'
-                    : 'border-gray-200',
+                    ? 'border-warning-600/30 bg-warning-50/40'
+                    : 'border-cream-300',
               )}
             >
               {step.done ? (
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-success-600" />
               ) : (
-                <Circle className={cn('mt-0.5 h-5 w-5 shrink-0', step.blocking ? 'text-amber-500' : 'text-gray-300')} />
+                <Circle className={cn('mt-0.5 h-5 w-5 shrink-0', step.blocking ? 'text-warning-600' : 'text-brand-300')} />
               )}
               <div className="min-w-0 flex-1">
-                <p className={cn('font-medium', step.done ? 'text-gray-500 line-through' : 'text-gray-900')}>
+                <p className={cn('font-medium', step.done ? 'text-brand-600 line-through' : 'text-brand-900')}>
                   {step.title}
                   {step.blocking && !step.done && (
-                    <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-800">
+                    <span className="ml-2 rounded bg-warning-50 px-1.5 py-0.5 text-xs font-medium text-warning-700">
                       Required
                     </span>
                   )}
                 </p>
-                <p className="mt-0.5 text-sm text-gray-500">{step.why}</p>
+                <p className="mt-0.5 text-sm text-brand-600">{step.why}</p>
               </div>
               {!step.done && step.action && (
                 <Button variant="outline" size="sm" onClick={step.action.onClick}>

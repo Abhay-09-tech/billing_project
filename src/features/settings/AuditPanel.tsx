@@ -71,7 +71,7 @@ export function AuditPanel() {
         }
       />
 
-      <p className="border-b border-gray-100 px-4 py-2.5 text-xs text-gray-500 sm:px-5">
+      <p className="border-b border-cream-200 px-4 py-2.5 text-xs text-brand-600 sm:px-5">
         Every change to a customer, prescription, order, bill, payment, product, stock level or
         setting is recorded here permanently. Entries cannot be edited or deleted by anyone,
         including administrators.
@@ -101,7 +101,7 @@ export function AuditPanel() {
             <TBody>
               {query.data.rows.map((log) => (
                 <TR key={log.id}>
-                  <TD className="whitespace-nowrap text-gray-500">
+                  <TD className="whitespace-nowrap text-brand-600">
                     {formatDateTime(log.created_at)}
                   </TD>
                   <TD>
@@ -110,10 +110,10 @@ export function AuditPanel() {
                     </Badge>
                   </TD>
                   <TD>
-                    <p className="text-gray-900">
+                    <p className="text-brand-900">
                       {ENTITY_LABELS[log.entity_type] ?? log.entity_type}
                     </p>
-                    <p className="font-mono text-xs text-gray-400">
+                    <p className="font-mono text-xs text-brand-500">
                       {log.entity_id.slice(0, 8)}
                     </p>
                   </TD>
@@ -141,7 +141,7 @@ function AuditDetail({ log }: { log: { before: unknown; after: unknown; metadata
   if (log.metadata && typeof log.metadata === 'object') {
     const entries = Object.entries(log.metadata as Record<string, unknown>)
     return (
-      <span className="text-xs text-gray-600">
+      <span className="text-xs text-brand-700">
         {entries.map(([k, v]) => `${k}: ${String(v)}`).join(' · ')}
       </span>
     )
@@ -155,9 +155,9 @@ function AuditDetail({ log }: { log: { before: unknown; after: unknown; metadata
     const changed = Object.keys(after).filter(
       (k) => !NOISE.has(k) && JSON.stringify(before[k]) !== JSON.stringify(after[k]),
     )
-    if (changed.length === 0) return <span className="text-xs text-gray-400">—</span>
+    if (changed.length === 0) return <span className="text-xs text-brand-500">—</span>
     return (
-      <span className="text-xs text-gray-600">
+      <span className="text-xs text-brand-700">
         Changed: {changed.slice(0, 6).join(', ')}
         {changed.length > 6 ? ` +${changed.length - 6} more` : ''}
       </span>
@@ -168,8 +168,8 @@ function AuditDetail({ log }: { log: { before: unknown; after: unknown; metadata
     const name = (after.full_name ?? after.name ?? after.invoice_no ?? after.order_code) as
       | string
       | undefined
-    return <span className="text-xs text-gray-600">{name ? `Created ${name}` : 'Created'}</span>
+    return <span className="text-xs text-brand-700">{name ? `Created ${name}` : 'Created'}</span>
   }
 
-  return <span className="text-xs text-gray-400">—</span>
+  return <span className="text-xs text-brand-500">—</span>
 }

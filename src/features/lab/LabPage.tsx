@@ -105,7 +105,7 @@ export default function LabPage() {
               'rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors',
               filter === f.value
                 ? 'border-brand-300 bg-brand-50 text-brand-800'
-                : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50',
+                : 'border-cream-300 bg-white text-brand-700 hover:bg-cream-100',
             )}
           >
             {f.label}
@@ -154,16 +154,16 @@ export default function LabPage() {
                           {job.orders?.order_code ?? '—'}
                         </button>
                         {job.lens_details && (
-                          <p className="max-w-xs truncate text-xs text-gray-500">{job.lens_details}</p>
+                          <p className="max-w-xs truncate text-xs text-brand-600">{job.lens_details}</p>
                         )}
                       </TD>
                       <TD>
-                        <p className="text-gray-900">{job.orders?.customers?.full_name ?? '—'}</p>
-                        <p className="text-xs tabular-nums text-gray-500">
+                        <p className="text-brand-900">{job.orders?.customers?.full_name ?? '—'}</p>
+                        <p className="text-xs tabular-nums text-brand-600">
                           {formatMobile(job.orders?.customers?.mobile)}
                         </p>
                       </TD>
-                      <TD className="hidden text-gray-600 lg:table-cell">
+                      <TD className="hidden text-brand-700 lg:table-cell">
                         {job.lab_vendors?.name ?? '—'}
                       </TD>
                       <TD>
@@ -172,7 +172,7 @@ export default function LabPage() {
                       <TD
                         className={cn(
                           'hidden sm:table-cell',
-                          overdue ? 'font-medium text-red-600' : 'text-gray-500',
+                          overdue ? 'font-medium text-error-600' : 'text-brand-600',
                         )}
                       >
                         {job.expected_return_date ? formatDate(job.expected_return_date) : '—'}

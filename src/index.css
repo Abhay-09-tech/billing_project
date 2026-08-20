@@ -1,13 +1,50 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Brand — calm teal, professional neutrals. */
-  --color-brand-50: #f0fdfa;
-  --color-brand-100: #ccfbf1;
-  --color-brand-600: #0d9488;
-  --color-brand-700: #0f766e;
-  --color-brand-800: #115e59;
-  --color-brand-900: #134e4a;
+  /* ──────────────────────────────────────────────────────────────────────
+     Brand — coffee.
+
+     A full 50-950 ramp rather than the handful of shades used before, so
+     every existing `brand-*` class re-themes at once and nothing has to
+     guess at a missing step. The named palette maps as:
+
+       brand-300 = Light Coffee   #C8A27A
+       brand-500 = Medium Coffee  #8B6F47
+       brand-700 = Coffee Brown   #6F4E37   <- primary brand colour
+       brand-900 = Dark Coffee    #3B2418
+     ────────────────────────────────────────────────────────────────────── */
+  --color-brand-50: #faf6f0;
+  --color-brand-100: #f2e8db;
+  --color-brand-200: #e4d2bc;
+  --color-brand-300: #c8a27a;
+  --color-brand-400: #a8845c;
+  --color-brand-500: #8b6f47;
+  --color-brand-600: #7a5a3f;
+  --color-brand-700: #6f4e37;
+  --color-brand-800: #573c2a;
+  --color-brand-900: #3b2418;
+  --color-brand-950: #2a1a11;
+
+  /* Surfaces — warm neutrals that sit under the brand without competing. */
+  --color-cream-50: #fffdf9; /* Off White — cards, inputs */
+  --color-cream-100: #f7f1e8; /* Cream — page background */
+  --color-cream-200: #efe5d6; /* Borders, table stripes */
+  --color-cream-300: #e2d4c0; /* Stronger dividers */
+
+  --color-charcoal: #242424;
+
+  /* Status — used ONLY for meaning, never decoration. */
+  --color-success-50: #eef5f1;
+  --color-success-600: #3f7d58;
+  --color-success-700: #336547;
+
+  --color-warning-50: #fdf6e9;
+  --color-warning-600: #c58b2a;
+  --color-warning-700: #8a5f18;
+
+  --color-error-50: #fbefef;
+  --color-error-600: #b54747;
+  --color-error-700: #973a3a;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
     'Noto Sans', sans-serif;
@@ -21,13 +58,17 @@
     @apply antialiased;
   }
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-cream-100 text-charcoal;
     /* Prevent iOS input zoom */
     -webkit-text-size-adjust: 100%;
   }
   /* Numeric tables should align digits. */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
+  }
+  /* Selection picks up the brand rather than the browser default blue. */
+  ::selection {
+    @apply bg-brand-200 text-brand-900;
   }
 }
 

@@ -4,14 +4,21 @@ import type { InvoiceStatus, LabOrderStatus, OrderStatusCode, WhatsAppMessageSta
 
 type Tone = 'gray' | 'green' | 'amber' | 'red' | 'blue' | 'teal' | 'purple'
 
+/**
+ * Status colours.
+ *
+ * Green means success and red means failure — nothing else. Everything
+ * in-progress uses the coffee ramp, so a glance at a list reads as "brown =
+ * still working, green = done, amber = needs attention, red = wrong".
+ */
 const tones: Record<Tone, string> = {
-  gray: 'bg-gray-100 text-gray-700',
-  green: 'bg-green-100 text-green-800',
-  amber: 'bg-amber-100 text-amber-800',
-  red: 'bg-red-100 text-red-800',
-  blue: 'bg-blue-100 text-blue-800',
-  teal: 'bg-brand-100 text-brand-800',
-  purple: 'bg-purple-100 text-purple-800',
+  gray: 'bg-cream-200 text-brand-800',
+  green: 'bg-success-50 text-success-700',
+  amber: 'bg-warning-50 text-warning-700',
+  red: 'bg-error-50 text-error-700',
+  blue: 'bg-brand-100 text-brand-800',
+  teal: 'bg-brand-200 text-brand-900',
+  purple: 'bg-brand-300/40 text-brand-900',
 }
 
 export function Badge({ tone = 'gray', className, children }: { tone?: Tone; className?: string; children: ReactNode }) {

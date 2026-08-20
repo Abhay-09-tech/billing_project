@@ -33,19 +33,19 @@ export function SearchInput({
 
   return (
     <div className={cn('relative', className)}>
-      <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-brand-500" />
       <input
         type="search"
         enterKeyHint="search"
         value={local}
         onChange={(e) => update(e.target.value)}
         placeholder={placeholder}
-        className="h-11 w-full rounded-lg border border-gray-300 bg-white pr-9 pl-9 text-base text-gray-900 placeholder:text-gray-400 focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20 focus:outline-none sm:text-sm"
+        className="h-11 w-full rounded-lg border border-cream-300 bg-white pr-9 pl-9 text-base text-brand-900 placeholder:text-brand-500 focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20 focus:outline-none sm:text-sm"
         {...props}
       />
       {local && (
         <button
-          className="absolute top-1/2 right-2 -translate-y-1/2 rounded p-1 text-gray-400 hover:text-gray-600"
+          className="absolute top-1/2 right-2 -translate-y-1/2 rounded p-1 text-brand-500 hover:text-brand-700"
           onClick={() => update('')}
           aria-label="Clear search"
         >

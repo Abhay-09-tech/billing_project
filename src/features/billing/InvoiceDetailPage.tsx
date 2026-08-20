@@ -121,45 +121,45 @@ export default function InvoiceDetailPage() {
       <div className="print:hidden">
         {/* ── Invoice created confirmation (brief §14) ────────────────────── */}
         {showConfirmation && isIssued && (
-          <Card className="mb-5 border-green-200 bg-green-50/50">
+          <Card className="mb-5 border-success-600/30 bg-success-50/50">
             <div className="p-5 sm:p-6">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 text-green-600" />
+                <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 text-success-600" />
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-lg font-semibold text-gray-900">Invoice created successfully</h2>
-                  <p className="mt-0.5 text-xl font-bold text-gray-900">{invoice.invoice_no}</p>
+                  <h2 className="text-lg font-semibold text-brand-900">Invoice created successfully</h2>
+                  <p className="mt-0.5 text-xl font-bold text-brand-900">{invoice.invoice_no}</p>
 
                   <dl className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
                     <div>
-                      <dt className="text-xs text-gray-500">Customer</dt>
-                      <dd className="mt-0.5 font-medium text-gray-900">
+                      <dt className="text-xs text-brand-600">Customer</dt>
+                      <dd className="mt-0.5 font-medium text-brand-900">
                         {invoice.customers?.full_name}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-xs text-gray-500">Total</dt>
-                      <dd className="mt-0.5 font-semibold tabular-nums text-gray-900">
+                      <dt className="text-xs text-brand-600">Total</dt>
+                      <dd className="mt-0.5 font-semibold tabular-nums text-brand-900">
                         {formatMoney(invoice.grand_total)}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-xs text-gray-500">Paid</dt>
-                      <dd className="mt-0.5 font-semibold tabular-nums text-gray-900">
+                      <dt className="text-xs text-brand-600">Paid</dt>
+                      <dd className="mt-0.5 font-semibold tabular-nums text-brand-900">
                         {formatMoney(invoice.amount_paid)}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-xs text-gray-500">Balance</dt>
+                      <dt className="text-xs text-brand-600">Balance</dt>
                       <dd
-                        className={`mt-0.5 font-semibold tabular-nums ${balance > 0 ? 'text-amber-700' : 'text-green-700'}`}
+                        className={`mt-0.5 font-semibold tabular-nums ${balance > 0 ? 'text-warning-700' : 'text-success-700'}`}
                       >
                         {formatMoney(balance)}
                       </dd>
                     </div>
                   </dl>
 
-                  <div className="mt-5 border-t border-green-200 pt-4">
-                    <p className="mb-2.5 text-sm font-medium text-gray-700">What next?</p>
+                  <div className="mt-5 border-t border-success-600/30 pt-4">
+                    <p className="mb-2.5 text-sm font-medium text-brand-800">What next?</p>
                     <div className="sm:hidden">
                       <InvoiceActions
                         invoice={invoice}
@@ -202,18 +202,18 @@ export default function InvoiceDetailPage() {
 
         <Link
           to="/billing"
-          className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-800"
+          className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-800"
         >
           <ArrowLeft className="h-4 w-4" />
           Billing
         </Link>
 
         {/* ── Header ──────────────────────────────────────────────────────── */}
-        <div className="mb-5 rounded-xl border border-gray-200 bg-white p-4 sm:p-5">
+        <div className="mb-5 rounded-xl border border-cream-300 bg-white p-4 sm:p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">
+                <h1 className="text-xl font-semibold text-brand-900 sm:text-2xl">
                   {invoice.invoice_no ?? 'Draft bill'}
                 </h1>
                 <InvoiceStatusBadge status={invoice.status} />
@@ -224,7 +224,7 @@ export default function InvoiceDetailPage() {
                   />
                 )}
               </div>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-brand-600">
                 {invoice.invoice_date
                   ? formatDate(invoice.invoice_date)
                   : `Created ${formatDate(invoice.created_at)}`}
@@ -250,7 +250,7 @@ export default function InvoiceDetailPage() {
               {isIssued && can(PERMS.invoicesCancel) && Number(invoice.amount_paid) === 0 && (
                 <Button
                   variant="ghost"
-                  className="text-red-600 hover:bg-red-50"
+                  className="text-error-600 hover:bg-error-50"
                   onClick={() => setCancelOpen(true)}
                 >
                   Cancel
@@ -260,17 +260,17 @@ export default function InvoiceDetailPage() {
           </div>
 
           {isIssued && !showConfirmation && (
-            <div className="mt-4 border-t border-gray-100 pt-4">{actions}</div>
+            <div className="mt-4 border-t border-cream-200 pt-4">{actions}</div>
           )}
 
           {isDraft && (
-            <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+            <p className="mt-3 rounded-lg bg-warning-50 px-3 py-2 text-sm text-warning-700">
               This is a draft. Issuing it allocates the invoice number permanently and locks the
               amounts — after that, corrections need a credit note.
             </p>
           )}
           {invoice.status === 'cancelled' && invoice.cancel_reason && (
-            <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">
+            <p className="mt-3 rounded-lg bg-error-50 px-3 py-2 text-sm text-error-700">
               Cancelled {invoice.cancelled_at ? formatDate(invoice.cancelled_at) : ''}:{' '}
               {invoice.cancel_reason}
             </p>
@@ -295,14 +295,14 @@ export default function InvoiceDetailPage() {
                 {items.map((item) => (
                   <TR key={item.id}>
                     <TD>
-                      <p className="font-medium text-gray-900">{item.description}</p>
-                      {item.hsn_code && <p className="text-xs text-gray-500">HSN {item.hsn_code}</p>}
+                      <p className="font-medium text-brand-900">{item.description}</p>
+                      {item.hsn_code && <p className="text-xs text-brand-600">HSN {item.hsn_code}</p>}
                     </TD>
                     <TDNum>{Number(item.qty)}</TDNum>
-                    <TDNum className="hidden text-gray-600 sm:table-cell">
+                    <TDNum className="hidden text-brand-700 sm:table-cell">
                       {formatMoney(item.taxable_amt)}
                     </TDNum>
-                    <TDNum className="hidden text-gray-600 sm:table-cell">
+                    <TDNum className="hidden text-brand-700 sm:table-cell">
                       {formatMoney(
                         Number(item.cgst_amt) + Number(item.sgst_amt) + Number(item.igst_amt),
                       )}
@@ -313,7 +313,7 @@ export default function InvoiceDetailPage() {
               </TBody>
             </Table>
 
-            <dl className="space-y-1.5 border-t border-gray-100 px-4 py-4 text-sm sm:px-5">
+            <dl className="space-y-1.5 border-t border-cream-200 px-4 py-4 text-sm sm:px-5">
               <Row label="Taxable value" value={formatMoney(invoice.taxable_total)} />
               {Number(invoice.discount_total) > 0 && (
                 <Row label="Discount" value={`− ${formatMoney(invoice.discount_total)}`} />
@@ -329,14 +329,14 @@ export default function InvoiceDetailPage() {
               {Number(invoice.round_off) !== 0 && (
                 <Row label="Round off" value={formatMoney(invoice.round_off)} />
               )}
-              <div className="flex justify-between border-t border-gray-100 pt-1.5 text-base font-semibold text-gray-900">
+              <div className="flex justify-between border-t border-cream-200 pt-1.5 text-base font-semibold text-brand-900">
                 <dt>Grand total</dt>
                 <dd className="tabular-nums">{formatMoney(invoice.grand_total)}</dd>
               </div>
               <Row label="Paid" value={formatMoney(invoice.amount_paid)} />
               <div className="flex justify-between font-semibold">
-                <dt className="text-gray-700">Balance due</dt>
-                <dd className={`tabular-nums ${balance > 0 ? 'text-amber-700' : 'text-green-700'}`}>
+                <dt className="text-brand-800">Balance due</dt>
+                <dd className={`tabular-nums ${balance > 0 ? 'text-warning-700' : 'text-success-700'}`}>
                   {formatMoney(balance)}
                 </dd>
               </div>
@@ -347,34 +347,34 @@ export default function InvoiceDetailPage() {
           <Card>
             <CardHeader title="Payments" />
             {payments.length === 0 ? (
-              <p className="px-4 py-6 text-center text-sm text-gray-500 sm:px-5">
+              <p className="px-4 py-6 text-center text-sm text-brand-600 sm:px-5">
                 No payments recorded yet.
               </p>
             ) : (
-              <ul className="divide-y divide-gray-100">
+              <ul className="divide-y divide-cream-200">
                 {payments.map((p) => (
                   <li key={p.id} className="px-4 py-3 sm:px-5">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <p className="font-medium text-gray-900 capitalize">
+                        <p className="font-medium text-brand-900 capitalize">
                           {p.method.replace('_', ' ')}
                           {p.entry_type !== 'payment' && (
-                            <span className="ml-1 text-xs text-gray-500">({p.entry_type})</span>
+                            <span className="ml-1 text-xs text-brand-600">({p.entry_type})</span>
                           )}
                         </p>
-                        <p className="text-xs text-gray-500">{formatDateTime(p.paid_at)}</p>
+                        <p className="text-xs text-brand-600">{formatDateTime(p.paid_at)}</p>
                         {p.reference_no && (
-                          <p className="text-xs text-gray-500">Ref: {p.reference_no}</p>
+                          <p className="text-xs text-brand-600">Ref: {p.reference_no}</p>
                         )}
                       </div>
                       <p
-                        className={`font-medium tabular-nums ${p.direction < 0 ? 'text-red-600' : 'text-gray-900'}`}
+                        className={`font-medium tabular-nums ${p.direction < 0 ? 'text-error-600' : 'text-brand-900'}`}
                       >
                         {p.direction < 0 ? '−' : ''}
                         {formatMoney(p.amount)}
                       </p>
                     </div>
-                    <p className="mt-0.5 text-xs text-gray-400">{p.payment_code}</p>
+                    <p className="mt-0.5 text-xs text-brand-500">{p.payment_code}</p>
                   </li>
                 ))}
               </ul>
@@ -430,7 +430,7 @@ export default function InvoiceDetailPage() {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between text-gray-600">
+    <div className="flex justify-between text-brand-700">
       <dt>{label}</dt>
       <dd className="tabular-nums">{value}</dd>
     </div>

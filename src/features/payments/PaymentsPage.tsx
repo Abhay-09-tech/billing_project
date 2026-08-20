@@ -83,7 +83,7 @@ export default function PaymentsPage() {
     <>
       <PageHeader title="Payments" subtitle="Money received, and what is still owed" />
 
-      <div className="mb-4 flex gap-1 rounded-lg bg-gray-100 p-1 sm:inline-flex">
+      <div className="mb-4 flex gap-1 rounded-lg bg-cream-200 p-1 sm:inline-flex">
         {(
           [
             ['received', 'Received'],
@@ -95,7 +95,7 @@ export default function PaymentsPage() {
             onClick={() => setTab(value)}
             className={cn(
               'flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors sm:flex-none',
-              tab === value ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900',
+              tab === value ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-700 hover:text-brand-900',
             )}
           >
             {label}
@@ -150,9 +150,9 @@ export default function PaymentsPage() {
                 </p>
               </div>
               {(['cash', 'upi', 'card', 'bank_transfer', 'other'] as const).map((m) => (
-                <div key={m} className="rounded-xl border border-gray-200 bg-white p-3.5">
-                  <p className="text-xs text-gray-500 capitalize">{m.replace('_', ' ')}</p>
-                  <p className="mt-0.5 text-lg font-semibold tabular-nums text-gray-900">
+                <div key={m} className="rounded-xl border border-cream-300 bg-white p-3.5">
+                  <p className="text-xs text-brand-600 capitalize">{m.replace('_', ' ')}</p>
+                  <p className="mt-0.5 text-lg font-semibold tabular-nums text-brand-900">
                     {formatMoneyWhole(byMethod[m] ?? 0)}
                   </p>
                 </div>
@@ -191,20 +191,20 @@ export default function PaymentsPage() {
                         onClick={() => p.invoice_id && navigate(`/billing/${p.invoice_id}`)}
                       >
                         <TD>
-                          <p className="font-medium text-gray-900">{p.payment_code}</p>
+                          <p className="font-medium text-brand-900">{p.payment_code}</p>
                           {p.entry_type !== 'payment' && (
                             <Badge tone={p.direction < 0 ? 'red' : 'gray'}>{p.entry_type}</Badge>
                           )}
                         </TD>
                         <TD>{p.customers?.full_name ?? '—'}</TD>
-                        <TD className="hidden text-gray-600 md:table-cell">
+                        <TD className="hidden text-brand-700 md:table-cell">
                           {p.invoices?.invoice_no ?? '—'}
                         </TD>
-                        <TD className="text-gray-600 capitalize">{p.method.replace('_', ' ')}</TD>
-                        <TD className="hidden whitespace-nowrap text-gray-500 lg:table-cell">
+                        <TD className="text-brand-700 capitalize">{p.method.replace('_', ' ')}</TD>
+                        <TD className="hidden whitespace-nowrap text-brand-600 lg:table-cell">
                           {formatDateTime(p.paid_at)}
                         </TD>
-                        <TDNum className={p.direction < 0 ? 'font-medium text-red-600' : 'font-medium'}>
+                        <TDNum className={p.direction < 0 ? 'font-medium text-error-600' : 'font-medium'}>
                           {p.direction < 0 ? '−' : ''}
                           {formatMoney(p.amount)}
                         </TDNum>
@@ -228,7 +228,7 @@ export default function PaymentsPage() {
             title="Outstanding balances"
             actions={
               outstanding.data && outstanding.data.length > 0 ? (
-                <span className="text-sm font-semibold tabular-nums text-amber-700">
+                <span className="text-sm font-semibold tabular-nums text-warning-700">
                   {formatMoney(outstandingTotal)} owed
                 </span>
               ) : undefined
@@ -272,26 +272,26 @@ export default function PaymentsPage() {
                         >
                           {row.full_name}
                         </button>
-                        <p className="text-xs tabular-nums text-gray-500">
+                        <p className="text-xs tabular-nums text-brand-600">
                           {formatMobile(row.mobile)}
                         </p>
                       </TD>
                       <TD className="hidden sm:table-cell">
                         <button
                           onClick={() => navigate(`/billing/${row.invoice_id}`)}
-                          className="text-gray-700 hover:text-gray-900"
+                          className="text-brand-800 hover:text-brand-900"
                         >
                           {row.invoice_no}
                         </button>
-                        <p className="text-xs text-gray-500">{formatDate(row.invoice_date)}</p>
+                        <p className="text-xs text-brand-600">{formatDate(row.invoice_date)}</p>
                       </TD>
-                      <TDNum className="hidden text-gray-600 md:table-cell">
+                      <TDNum className="hidden text-brand-700 md:table-cell">
                         {formatMoney(row.grand_total)}
                       </TDNum>
-                      <TDNum className="hidden text-gray-600 md:table-cell">
+                      <TDNum className="hidden text-brand-700 md:table-cell">
                         {formatMoney(row.amount_paid)}
                       </TDNum>
-                      <TDNum className="font-semibold text-amber-700">
+                      <TDNum className="font-semibold text-warning-700">
                         {formatMoney(row.balance)}
                       </TDNum>
                       <TD>
@@ -303,7 +303,7 @@ export default function PaymentsPage() {
                         ) : days > 7 ? (
                           <Badge tone="amber">{days}d</Badge>
                         ) : (
-                          <span className="text-sm tabular-nums text-gray-500">{days}d</span>
+                          <span className="text-sm tabular-nums text-brand-600">{days}d</span>
                         )}
                       </TD>
                       <TD>
@@ -311,7 +311,7 @@ export default function PaymentsPage() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="border-[#25D366] text-[#128C7E] hover:bg-[#25D366]/10"
+                            className="border-brand-300 text-brand-700 hover:bg-brand-50"
                             onClick={() => setReminder(row)}
                           >
                             <MessageCircle className="h-4 w-4" />

@@ -131,19 +131,19 @@ export default function ProductsPage() {
                   return (
                     <TR key={p.id}>
                       <TD>
-                        <p className="font-medium text-gray-900">{p.name}</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="font-medium text-brand-900">{p.name}</p>
+                        <p className="text-xs text-brand-600">
                           {p.sku}
                           {p.model ? ` · ${p.model}` : ''}
                           {p.color ? ` · ${p.color}` : ''}
                         </p>
                       </TD>
-                      <TD className="hidden text-gray-600 md:table-cell">
+                      <TD className="hidden text-brand-700 md:table-cell">
                         {p.product_categories?.name ?? '—'}
                       </TD>
-                      <TD className="hidden text-gray-600 lg:table-cell">{p.brands?.name ?? '—'}</TD>
+                      <TD className="hidden text-brand-700 lg:table-cell">{p.brands?.name ?? '—'}</TD>
                       <TDNum className="font-medium">{formatMoney(p.selling_price)}</TDNum>
-                      <TDNum className="hidden text-gray-500 sm:table-cell">{p.gst_rate_pct}%</TDNum>
+                      <TDNum className="hidden text-brand-600 sm:table-cell">{p.gst_rate_pct}%</TDNum>
                       <TDNum>
                         {!p.is_stock_tracked ? (
                           <Badge tone="gray">Made to order</Badge>
@@ -157,7 +157,7 @@ export default function ProductsPage() {
                         <TD>
                           <button
                             onClick={() => setEditing(p)}
-                            className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                            className="rounded-lg p-2 text-brand-500 hover:bg-cream-200 hover:text-brand-800"
                             aria-label={`Edit ${p.name}`}
                           >
                             <Pencil className="h-4 w-4" />

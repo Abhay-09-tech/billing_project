@@ -213,7 +213,7 @@ export function ProductDialog({ open, onOpenChange, product }: Props) {
           </FormField>
         </div>
 
-        <div className="grid gap-3 border-t border-gray-100 pt-4 sm:grid-cols-4">
+        <div className="grid gap-3 border-t border-cream-200 pt-4 sm:grid-cols-4">
           <FormField label="Purchase price" htmlFor="p-pp">
             <Input id="p-pp" type="number" step="0.01" min={0} inputMode="decimal" {...form.register('purchase_price')} />
           </FormField>
@@ -234,7 +234,7 @@ export function ProductDialog({ open, onOpenChange, product }: Props) {
           </FormField>
         </div>
 
-        <div className="grid gap-3 border-t border-gray-100 pt-4 sm:grid-cols-3">
+        <div className="grid gap-3 border-t border-cream-200 pt-4 sm:grid-cols-3">
           <FormField label="Supplier" htmlFor="p-sup">
             <Select id="p-sup" {...form.register('supplier_id')}>
               <option value="">—</option>
@@ -275,16 +275,16 @@ export function ProductDialog({ open, onOpenChange, product }: Props) {
           )}
         </div>
 
-        <label className="flex items-start gap-2.5 text-sm text-gray-700">
+        <label className="flex items-start gap-2.5 text-sm text-brand-800">
           <input
             type="checkbox"
-            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-700 focus:ring-brand-600"
+            className="mt-0.5 h-4 w-4 rounded border-cream-300 text-brand-700 focus:ring-brand-600"
             disabled={category ? category.kind !== 'stocked' : false}
             {...form.register('is_stock_tracked')}
           />
           <span>
             Track stock for this product
-            <span className="block text-xs text-gray-500">
+            <span className="block text-xs text-brand-600">
               Turn off for made-to-order items such as prescription lenses, which are ordered
               from the lab per job rather than held on the shelf.
             </span>

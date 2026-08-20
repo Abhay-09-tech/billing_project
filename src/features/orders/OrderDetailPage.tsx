@@ -124,21 +124,21 @@ export default function OrderDetailPage() {
     <>
       <Link
         to="/orders"
-        className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-800"
+        className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-800"
       >
         <ArrowLeft className="h-4 w-4" />
         Orders
       </Link>
 
       {/* ── Header ────────────────────────────────────────────────────── */}
-      <div className="mb-5 rounded-xl border border-gray-200 bg-white p-4 sm:p-5">
+      <div className="mb-5 rounded-xl border border-cream-300 bg-white p-4 sm:p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">{order.order_code}</h1>
+              <h1 className="text-xl font-semibold text-brand-900 sm:text-2xl">{order.order_code}</h1>
               <OrderStatusBadge status={order.status} label={current?.label} />
             </div>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-brand-600">
               Created {formatDate(order.created_at)}
               {order.expected_delivery_date
                 ? ` · Expected ${formatDate(order.expected_delivery_date)}`
@@ -150,7 +150,7 @@ export default function OrderDetailPage() {
             >
               {order.customers?.full_name}
             </Link>
-            <p className="text-sm text-gray-500">{formatMobile(order.customers?.mobile)}</p>
+            <p className="text-sm text-brand-600">{formatMobile(order.customers?.mobile)}</p>
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -168,8 +168,8 @@ export default function OrderDetailPage() {
                 size="sm"
                 className={
                   isReady
-                    ? 'bg-[#25D366] hover:bg-[#1da851]'
-                    : 'border-[#25D366] text-[#128C7E] hover:bg-[#25D366]/10'
+                    ? 'bg-brand-700 hover:bg-brand-800'
+                    : 'border-brand-300 text-brand-700 hover:bg-brand-50'
                 }
                 onClick={() => setWaOpen(true)}
               >
@@ -202,8 +202,8 @@ export default function OrderDetailPage() {
 
         {/* ── Status actions ──────────────────────────────────────────── */}
         {can(PERMS.ordersUpdateStatus) && (nextStatuses.length > 0 || canCancel) && (
-          <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-4">
-            <span className="text-sm text-gray-500">Move to:</span>
+          <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-cream-200 pt-4">
+            <span className="text-sm text-brand-600">Move to:</span>
             {nextStatuses.map((code) => {
               const s = statuses.data?.find((x) => x.code === code)
               return (
@@ -226,7 +226,7 @@ export default function OrderDetailPage() {
               <Button
                 size="sm"
                 variant="ghost"
-                className="text-red-600 hover:bg-red-50"
+                className="text-error-600 hover:bg-error-50"
                 onClick={() => setCancelOpen(true)}
               >
                 Cancel order
@@ -236,7 +236,7 @@ export default function OrderDetailPage() {
         )}
 
         {order.status === 'cancelled' && order.cancel_reason && (
-          <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">
+          <p className="mt-3 rounded-lg bg-error-50 px-3 py-2 text-sm text-error-700">
             Cancelled: {order.cancel_reason}
           </p>
         )}
@@ -260,14 +260,14 @@ export default function OrderDetailPage() {
               {items.map((item) => (
                 <TR key={item.id}>
                   <TD>
-                    <p className="font-medium text-gray-900">{item.description}</p>
-                    <p className="text-xs text-gray-500 capitalize">
+                    <p className="font-medium text-brand-900">{item.description}</p>
+                    <p className="text-xs text-brand-600 capitalize">
                       {item.item_kind === 'lens' ? 'Lens (made to order)' : item.item_kind}
                     </p>
                   </TD>
                   <TDNum>{item.qty}</TDNum>
                   <TDNum>{formatMoney(item.unit_price)}</TDNum>
-                  <TDNum className="hidden text-gray-500 sm:table-cell">
+                  <TDNum className="hidden text-brand-600 sm:table-cell">
                     {Number(item.discount_amt) > 0 ? formatMoney(item.discount_amt) : '—'}
                   </TDNum>
                   <TDNum className="font-medium">{formatMoney(item.line_total)}</TDNum>
@@ -275,25 +275,25 @@ export default function OrderDetailPage() {
               ))}
             </TBody>
           </Table>
-          <dl className="space-y-1.5 border-t border-gray-100 px-4 py-4 text-sm sm:px-5">
-            <div className="flex justify-between text-gray-600">
+          <dl className="space-y-1.5 border-t border-cream-200 px-4 py-4 text-sm sm:px-5">
+            <div className="flex justify-between text-brand-700">
               <dt>Total (incl. GST)</dt>
               <dd className="tabular-nums">{formatMoney(order.grand_total)}</dd>
             </div>
-            <div className="flex justify-between text-gray-600">
+            <div className="flex justify-between text-brand-700">
               <dt>Advance received</dt>
               <dd className="tabular-nums">{formatMoney(order.advance_amount)}</dd>
             </div>
-            <div className="flex justify-between border-t border-gray-100 pt-1.5 font-semibold text-gray-900">
+            <div className="flex justify-between border-t border-cream-200 pt-1.5 font-semibold text-brand-900">
               <dt>Balance</dt>
-              <dd className={`tabular-nums ${balance > 0 ? 'text-amber-700' : ''}`}>
+              <dd className={`tabular-nums ${balance > 0 ? 'text-warning-700' : ''}`}>
                 {formatMoney(balance)}
               </dd>
             </div>
           </dl>
           {order.notes && (
-            <p className="border-t border-gray-100 px-4 py-3 text-sm text-gray-600 sm:px-5">
-              <span className="font-medium text-gray-700">Notes: </span>
+            <p className="border-t border-cream-200 px-4 py-3 text-sm text-brand-700 sm:px-5">
+              <span className="font-medium text-brand-800">Notes: </span>
               {order.notes}
             </p>
           )}
@@ -307,7 +307,7 @@ export default function OrderDetailPage() {
               {prescription ? (
                 <RxCard rx={prescription} />
               ) : (
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-brand-600">
                   No prescription linked to this order.
                 </p>
               )}
@@ -321,16 +321,16 @@ export default function OrderDetailPage() {
               <div className="space-y-3 p-4 sm:p-5">
                 {labOrders.map((lab) => (
                   <div key={lab.id} className="text-sm">
-                    <p className="font-medium text-gray-900 capitalize">
+                    <p className="font-medium text-brand-900 capitalize">
                       {lab.status.replaceAll('_', ' ')}
                     </p>
-                    <p className="text-gray-500">Sent {formatDate(lab.sent_at)}</p>
+                    <p className="text-brand-600">Sent {formatDate(lab.sent_at)}</p>
                     {lab.expected_return_date && (
-                      <p className="text-gray-500">
+                      <p className="text-brand-600">
                         Expected back {formatDate(lab.expected_return_date)}
                       </p>
                     )}
-                    {lab.lens_details && <p className="mt-1 text-gray-600">{lab.lens_details}</p>}
+                    {lab.lens_details && <p className="mt-1 text-brand-700">{lab.lens_details}</p>}
                   </div>
                 ))}
               </div>
@@ -345,19 +345,19 @@ export default function OrderDetailPage() {
                 <li key={h.id} className="flex gap-3 text-sm">
                   <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-500" />
                   <div>
-                    <p className="text-gray-900">
+                    <p className="text-brand-900">
                       {statuses.data?.find((s) => s.code === h.to_status)?.label ?? h.to_status}
                     </p>
-                    <p className="text-xs text-gray-500">{formatDateTime(h.changed_at)}</p>
-                    {h.note && <p className="mt-0.5 text-gray-600">{h.note}</p>}
+                    <p className="text-xs text-brand-600">{formatDateTime(h.changed_at)}</p>
+                    {h.note && <p className="mt-0.5 text-brand-700">{h.note}</p>}
                   </div>
                 </li>
               ))}
               <li className="flex gap-3 text-sm">
-                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-gray-300" />
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-300" />
                 <div>
-                  <p className="text-gray-900">Order created</p>
-                  <p className="text-xs text-gray-500">{formatDateTime(order.created_at)}</p>
+                  <p className="text-brand-900">Order created</p>
+                  <p className="text-xs text-brand-600">{formatDateTime(order.created_at)}</p>
                 </div>
               </li>
             </ol>
@@ -474,7 +474,7 @@ function SendToLabDialog({
             ))}
           </Select>
           {vendors.data?.length === 0 && (
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-brand-600">
               No labs added yet — you can still create the job and set the lab later.
             </p>
           )}

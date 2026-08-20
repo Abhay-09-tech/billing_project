@@ -14,8 +14,8 @@ export function Pagination({ page, pageSize, total, onPageChange }: PaginationPr
   const from = page * pageSize + 1
   const to = Math.min(total, (page + 1) * pageSize)
   return (
-    <div className="flex items-center justify-between gap-3 border-t border-gray-100 px-4 py-3">
-      <p className="text-sm text-gray-500 tabular-nums">
+    <div className="flex items-center justify-between gap-3 border-t border-cream-200 px-4 py-3">
+      <p className="text-sm text-brand-600 tabular-nums">
         {from}–{to} of {total}
       </p>
       <div className="flex items-center gap-1">
@@ -28,7 +28,7 @@ export function Pagination({ page, pageSize, total, onPageChange }: PaginationPr
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <span className="px-2 text-sm text-gray-600 tabular-nums">
+        <span className="px-2 text-sm text-brand-700 tabular-nums">
           {page + 1} / {pages}
         </span>
         <Button

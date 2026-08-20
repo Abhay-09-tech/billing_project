@@ -45,7 +45,7 @@ export default function ReportsPage() {
               'rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors',
               report === r.value
                 ? 'border-brand-300 bg-brand-50 text-brand-800'
-                : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50',
+                : 'border-cream-300 bg-white text-brand-700 hover:bg-cream-100',
             )}
           >
             {r.label}
@@ -197,10 +197,10 @@ function SalesReport({ range }: { range: DateRange }) {
                   <TDNum>{r.orders_count}</TDNum>
                   <TDNum>{r.invoices_count}</TDNum>
                   <TDNum>{formatMoney(r.gross_sales)}</TDNum>
-                  <TDNum className="hidden text-gray-500 sm:table-cell">
+                  <TDNum className="hidden text-brand-600 sm:table-cell">
                     {formatMoney(r.discounts)}
                   </TDNum>
-                  <TDNum className="hidden text-gray-500 sm:table-cell">{formatMoney(r.gst)}</TDNum>
+                  <TDNum className="hidden text-brand-600 sm:table-cell">{formatMoney(r.gst)}</TDNum>
                   <TDNum>{formatMoney(r.collected)}</TDNum>
                 </TR>
               ))}
@@ -279,7 +279,7 @@ function PaymentsReport({ range }: { range: DateRange }) {
                   <TD className="capitalize">{m.replace('_', ' ')}</TD>
                   <TDNum>{v.count}</TDNum>
                   <TDNum className="font-medium">{formatMoney(v.total)}</TDNum>
-                  <TDNum className="hidden text-gray-500 sm:table-cell">
+                  <TDNum className="hidden text-brand-600 sm:table-cell">
                     {total > 0 ? `${Math.round((v.total / total) * 100)}%` : '—'}
                   </TDNum>
                 </TR>
@@ -374,16 +374,16 @@ function OutstandingReport() {
               {rows.map((r) => (
                 <TR key={r.invoice_id}>
                   <TD>
-                    <p className="font-medium text-gray-900">{r.full_name}</p>
-                    <p className="text-xs tabular-nums text-gray-500">{formatMobile(r.mobile)}</p>
+                    <p className="font-medium text-brand-900">{r.full_name}</p>
+                    <p className="text-xs tabular-nums text-brand-600">{formatMobile(r.mobile)}</p>
                   </TD>
-                  <TD className="hidden text-gray-600 sm:table-cell">{r.invoice_no}</TD>
-                  <TDNum className="hidden text-gray-600 md:table-cell">
+                  <TD className="hidden text-brand-700 sm:table-cell">{r.invoice_no}</TD>
+                  <TDNum className="hidden text-brand-700 md:table-cell">
                     {formatMoney(r.grand_total)}
                   </TDNum>
-                  <TDNum className="font-semibold text-amber-700">{formatMoney(r.balance)}</TDNum>
+                  <TDNum className="font-semibold text-warning-700">{formatMoney(r.balance)}</TDNum>
                   <TDNum
-                    className={Number(r.days_outstanding) > 30 ? 'font-medium text-red-600' : ''}
+                    className={Number(r.days_outstanding) > 30 ? 'font-medium text-error-600' : ''}
                   >
                     {r.days_outstanding}
                   </TDNum>
@@ -407,12 +407,12 @@ function Stat({
   tone?: 'red'
 }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-3.5">
-      <p className="text-xs text-gray-500">{label}</p>
+    <div className="rounded-xl border border-cream-300 bg-white p-3.5">
+      <p className="text-xs text-brand-600">{label}</p>
       <p
         className={cn(
           'mt-0.5 text-lg font-semibold tabular-nums sm:text-xl',
-          tone === 'red' ? 'text-red-700' : 'text-gray-900',
+          tone === 'red' ? 'text-error-700' : 'text-brand-900',
         )}
       >
         {value}

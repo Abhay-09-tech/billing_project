@@ -42,7 +42,7 @@ export default function SettingsPage() {
       />
 
       <div className="mb-4 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-        <div className="inline-flex gap-1 rounded-lg bg-gray-100 p-1">
+        <div className="inline-flex gap-1 rounded-lg bg-cream-200 p-1">
           {(
             [
               ['setup', 'Setup'],
@@ -60,8 +60,8 @@ export default function SettingsPage() {
               className={cn(
                 'rounded-md px-3.5 py-2 text-sm font-medium whitespace-nowrap transition-colors',
                 tab === value
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900',
+                  ? 'bg-white text-brand-900 shadow-sm'
+                  : 'text-brand-700 hover:text-brand-900',
               )}
             >
               {label}
@@ -117,7 +117,7 @@ function ShopSettings() {
         onSubmit={form.handleSubmit((v) => mutation.mutate(v))}
         className="space-y-4 p-4 sm:p-5"
       >
-        <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+        <p className="rounded-lg bg-warning-50 px-3 py-2 text-sm text-warning-700">
           These details print on every invoice. Fill them in before you issue your first real bill.
         </p>
 
@@ -229,7 +229,7 @@ function BillingSettingsPanel() {
           </FormField>
         </div>
 
-        <p className="rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-600">
+        <p className="rounded-lg bg-cream-100 px-3 py-2 text-sm text-brand-700">
           Changing the price display affects <strong>new</strong> bills only. Every invoice stores
           which setting was in force when it was issued, so past bills never change.
         </p>
@@ -273,28 +273,28 @@ function NumberingSettings() {
     <Card>
       <CardHeader title="Document numbering" />
       <div className="space-y-4 p-4 sm:p-5">
-        <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+        <p className="rounded-lg bg-warning-50 px-3 py-2 text-sm text-warning-700">
           Numbering is deliberately read-only here. Changing an invoice series mid-year breaks the
           consecutive sequence GST requires (CGST Rule 46(b)) — it needs a considered change, not a
           quick edit. Ask your developer to change it in a migration.
         </p>
 
-        <dl className="divide-y divide-gray-100">
+        <dl className="divide-y divide-cream-200">
           {keys.map((k) => {
             const cfg = queries.data?.[k] as Record<string, unknown> | null
             return (
               <div key={k} className="flex flex-wrap items-center justify-between gap-2 py-3">
                 <div>
-                  <dt className="text-sm font-medium text-gray-900 capitalize">
+                  <dt className="text-sm font-medium text-brand-900 capitalize">
                     {k.replace('numbering.', '')}
                   </dt>
-                  <dd className="text-xs text-gray-500">
+                  <dd className="text-xs text-brand-600">
                     {cfg?.reset === 'fy'
                       ? 'Resets every financial year (April)'
                       : 'Continuous, never resets'}
                   </dd>
                 </div>
-                <code className="rounded bg-gray-100 px-2 py-1 text-sm text-gray-800">
+                <code className="rounded bg-cream-200 px-2 py-1 text-sm text-brand-800">
                   {preview(cfg)}
                 </code>
               </div>

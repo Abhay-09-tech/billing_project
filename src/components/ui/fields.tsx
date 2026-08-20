@@ -2,9 +2,9 @@ import { forwardRef, useId, type InputHTMLAttributes, type ReactNode, type Selec
 import { cn } from '@/lib/utils'
 
 const fieldBase =
-  'block w-full rounded-lg border border-gray-300 bg-white px-3 text-gray-900 ' +
-  'placeholder:text-gray-400 focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20 focus:outline-none ' +
-  'disabled:bg-gray-50 disabled:text-gray-500 aria-invalid:border-red-400 aria-invalid:focus:ring-red-500/20 ' +
+  'block w-full rounded-lg border border-cream-300 bg-cream-50 px-3 text-charcoal transition-colors ' +
+  'placeholder:text-brand-400/70 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-600/20 focus:outline-none ' +
+  'disabled:bg-cream-200/50 disabled:text-brand-500 aria-invalid:border-error-600 aria-invalid:focus:ring-error-600/20 ' +
   'text-base sm:text-sm' // 16px on mobile prevents iOS zoom
 
 export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
@@ -45,17 +45,17 @@ export function FormField({ label, required, error, hint, children, htmlFor, cla
   const id = htmlFor ?? autoId
   return (
     <div className={cn('space-y-1.5', className)}>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      <label htmlFor={id} className="block text-sm font-medium text-brand-800">
         {label}
-        {required && <span className="ml-0.5 text-red-500">*</span>}
+        {required && <span className="ml-0.5 text-error-600">*</span>}
       </label>
       {children}
       {error ? (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm font-medium text-error-600" role="alert">
           {error}
         </p>
       ) : hint ? (
-        <p className="text-sm text-gray-500">{hint}</p>
+        <p className="text-sm text-brand-600">{hint}</p>
       ) : null}
     </div>
   )

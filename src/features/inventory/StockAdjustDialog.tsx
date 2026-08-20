@@ -169,7 +169,7 @@ export function StockAdjustDialog({ open, onOpenChange, productId }: Props) {
           />
         </FormField>
 
-        <p className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600">
+        <p className="rounded-lg bg-cream-100 px-3 py-2 text-xs text-brand-700">
           Stock is a permanent ledger. This creates a new entry — it never edits or erases
           an earlier one, so the history always explains the current quantity.
         </p>

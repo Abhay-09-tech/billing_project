@@ -213,14 +213,14 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
         <div className="space-y-5">
           {/* ── 1. Customer ─────────────────────────────────────────────── */}
           <section>
-            <p className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
+            <p className="mb-2 text-xs font-semibold tracking-wide text-brand-600 uppercase">
               1 · Customer
             </p>
             {customerId && customer.data ? (
-              <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-cream-300 bg-cream-100 px-3 py-2.5">
                 <div>
-                  <p className="font-medium text-gray-900">{customer.data.customer.full_name}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-medium text-brand-900">{customer.data.customer.full_name}</p>
+                  <p className="text-sm text-brand-600">
                     {formatMobile(customer.data.customer.mobile)} ·{' '}
                     {customer.data.customer.customer_code}
                   </p>
@@ -244,7 +244,7 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
                   </Button>
                 </div>
                 {searchResults.data && searchResults.data.length > 0 && (
-                  <ul className="max-h-44 divide-y divide-gray-100 overflow-y-auto rounded-lg border border-gray-200">
+                  <ul className="max-h-44 divide-y divide-cream-200 overflow-y-auto rounded-lg border border-cream-300">
                     {searchResults.data.map((hit: CustomerSearchHit) => (
                       <li key={`${hit.id}-${hit.match_via}`}>
                         <button
@@ -255,10 +255,10 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
                           className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left hover:bg-brand-50"
                         >
                           <span>
-                            <span className="block text-sm font-medium text-gray-900">
+                            <span className="block text-sm font-medium text-brand-900">
                               {hit.full_name}
                             </span>
-                            <span className="block text-xs text-gray-500">
+                            <span className="block text-xs text-brand-600">
                               {formatMobile(hit.mobile)} · {hit.customer_code}
                             </span>
                           </span>
@@ -275,7 +275,7 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
             <>
               {/* ── 2. Prescription ───────────────────────────────────── */}
               <section>
-                <p className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                <p className="mb-2 text-xs font-semibold tracking-wide text-brand-600 uppercase">
                   2 · Prescription
                 </p>
                 {customer.data && customer.data.prescriptions.length > 0 ? (
@@ -302,7 +302,7 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
                     )}
                   </div>
                 ) : (
-                  <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+                  <p className="rounded-lg bg-warning-50 px-3 py-2 text-sm text-warning-700">
                     This customer has no prescription yet. You can still take the order — add the
                     prescription from their profile before sending the job to the lab.
                   </p>
@@ -311,7 +311,7 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
 
               {/* ── 3. Items ──────────────────────────────────────────── */}
               <section>
-                <p className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                <p className="mb-2 text-xs font-semibold tracking-wide text-brand-600 uppercase">
                   3 · Frame, lenses and extras
                 </p>
 
@@ -345,13 +345,13 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
                 </div>
 
                 {lines.length === 0 ? (
-                  <p className="rounded-lg border border-dashed border-gray-300 px-3 py-6 text-center text-sm text-gray-500">
+                  <p className="rounded-lg border border-dashed border-cream-300 px-3 py-6 text-center text-sm text-brand-600">
                     No items yet. Add a frame from the list, or add a lens.
                   </p>
                 ) : (
                   <div className="space-y-2">
                     {lines.map((line) => (
-                      <div key={line.key} className="rounded-lg border border-gray-200 p-3">
+                      <div key={line.key} className="rounded-lg border border-cream-300 p-3">
                         <div className="mb-2 flex items-start gap-2">
                           <div className="flex-1">
                             {line.item_kind === 'lens' ? (
@@ -362,12 +362,12 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
                                 aria-label="Lens description"
                               />
                             ) : (
-                              <p className="pt-2 font-medium text-gray-900">{line.description}</p>
+                              <p className="pt-2 font-medium text-brand-900">{line.description}</p>
                             )}
                           </div>
                           <button
                             onClick={() => setLines((prev) => prev.filter((l) => l.key !== line.key))}
-                            className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                            className="rounded-lg p-2 text-brand-500 hover:bg-error-50 hover:text-error-600"
                             aria-label="Remove item"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -436,30 +436,30 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
 
               {/* ── 4. Totals + advance ───────────────────────────────── */}
               {lines.length > 0 && (
-                <section className="rounded-lg bg-gray-50 p-3">
+                <section className="rounded-lg bg-cream-100 p-3">
                   <dl className="space-y-1 text-sm">
-                    <div className="flex justify-between text-gray-600">
+                    <div className="flex justify-between text-brand-700">
                       <dt>Taxable value</dt>
                       <dd className="tabular-nums">{formatMoney(totals.taxableTotal)}</dd>
                     </div>
-                    <div className="flex justify-between text-gray-600">
+                    <div className="flex justify-between text-brand-700">
                       <dt>CGST + SGST</dt>
                       <dd className="tabular-nums">
                         {formatMoney(totals.cgstTotal + totals.sgstTotal)}
                       </dd>
                     </div>
                     {totals.discountTotal > 0 && (
-                      <div className="flex justify-between text-gray-600">
+                      <div className="flex justify-between text-brand-700">
                         <dt>Discount</dt>
                         <dd className="tabular-nums">− {formatMoney(totals.discountTotal)}</dd>
                       </div>
                     )}
-                    <div className="flex justify-between border-t border-gray-200 pt-1.5 text-base font-semibold text-gray-900">
+                    <div className="flex justify-between border-t border-cream-300 pt-1.5 text-base font-semibold text-brand-900">
                       <dt>Total</dt>
                       <dd className="tabular-nums">{formatMoney(totals.grandTotal)}</dd>
                     </div>
                   </dl>
-                  <p className="mt-1.5 text-xs text-gray-500">
+                  <p className="mt-1.5 text-xs text-brand-600">
                     Prices include GST. The final bill is recalculated by the system when the
                     invoice is issued.
                   </p>
@@ -511,7 +511,7 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
             </>
           )}
 
-          <div className="flex justify-end gap-2 border-t border-gray-100 pt-3">
+          <div className="flex justify-end gap-2 border-t border-cream-200 pt-3">
             <Button variant="outline" onClick={() => onOpenChange(false)} disabled={mutation.isPending}>
               Cancel
             </Button>

@@ -117,7 +117,7 @@ autoTable(doc, {
     `${rs(it.cgst_amt + it.sgst_amt + it.igst_amt)}\n(${it.gst_rate_pct}%)`, rs(it.line_total),
   ]),
   theme: 'grid',
-  headStyles: { fillColor: [15, 118, 110], textColor: 255, fontSize: 8 },
+  headStyles: { fillColor: [111, 78, 55], textColor: 255, fontSize: 8 },
   bodyStyles: { fontSize: 8 },
   margin: { left: margin, right: margin },
 })

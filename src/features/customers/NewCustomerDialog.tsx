@@ -86,17 +86,17 @@ export function NewCustomerDialog({ open, onOpenChange, onCreated }: Props) {
         </FormField>
 
         {duplicates.length > 0 && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
-            <p className="flex items-center gap-1.5 text-sm font-medium text-amber-900">
+          <div className="rounded-lg border border-warning-600/30 bg-warning-50 p-3">
+            <p className="flex items-center gap-1.5 text-sm font-medium text-warning-700">
               <AlertTriangle className="h-4 w-4" />
               Possible existing customer
             </p>
             <ul className="mt-2 space-y-1.5">
               {duplicates.map((d) => (
                 <li key={d.id} className="flex items-center justify-between gap-2 text-sm">
-                  <span className="text-amber-900">
+                  <span className="text-warning-700">
                     {d.full_name} · {formatMobile(d.mobile)}{' '}
-                    <span className="text-amber-700">({d.customer_code})</span>
+                    <span className="text-warning-700">({d.customer_code})</span>
                   </span>
                   <Button
                     variant="ghost"
@@ -111,7 +111,7 @@ export function NewCustomerDialog({ open, onOpenChange, onCreated }: Props) {
                 </li>
               ))}
             </ul>
-            <p className="mt-2 text-xs text-amber-700">
+            <p className="mt-2 text-xs text-warning-700">
               You can still create a new customer — the mobile number must differ.
             </p>
           </div>
@@ -127,7 +127,7 @@ export function NewCustomerDialog({ open, onOpenChange, onCreated }: Props) {
         </button>
 
         {showMore && (
-          <div className="space-y-4 border-t border-gray-100 pt-4">
+          <div className="space-y-4 border-t border-cream-200 pt-4">
             <FormField label="WhatsApp number" hint="Leave blank to use the mobile number" error={form.formState.errors.whatsappNumber?.message} htmlFor="c-wa">
               <Input id="c-wa" type="tel" inputMode="numeric" maxLength={10} {...form.register('whatsappNumber')} />
             </FormField>
@@ -156,11 +156,11 @@ export function NewCustomerDialog({ open, onOpenChange, onCreated }: Props) {
             <FormField label="Notes" htmlFor="c-notes">
               <Textarea id="c-notes" rows={2} placeholder="Preferences, referrals, anything useful next visit" {...form.register('notes')} />
             </FormField>
-            <label className="flex items-start gap-2.5 text-sm text-gray-700">
-              <input type="checkbox" className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-700 focus:ring-brand-600" {...form.register('whatsappOptIn')} />
+            <label className="flex items-start gap-2.5 text-sm text-brand-800">
+              <input type="checkbox" className="mt-0.5 h-4 w-4 rounded border-cream-300 text-brand-700 focus:ring-brand-600" {...form.register('whatsappOptIn')} />
               <span>
                 Customer agrees to receive updates on WhatsApp
-                <span className="block text-xs text-gray-500">Required for promotional messages such as review requests.</span>
+                <span className="block text-xs text-brand-600">Required for promotional messages such as review requests.</span>
               </span>
             </label>
           </div>

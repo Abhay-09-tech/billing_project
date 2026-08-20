@@ -78,7 +78,7 @@ export function UsersPanel() {
         />
 
         {activeAdmins < 2 && (
-          <p className="mx-4 mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800 sm:mx-5">
+          <p className="mx-4 mt-4 rounded-lg bg-warning-50 px-3 py-2 text-sm text-warning-700 sm:mx-5">
             Only one active administrator. Create a second admin account — if you lose access to
             this one, nobody can manage users, settings or prices.
           </p>
@@ -101,11 +101,11 @@ export function UsersPanel() {
               return (
                 <TR key={u.id}>
                   <TD>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-brand-900">
                       {u.full_name}
-                      {isSelf && <span className="ml-1.5 text-xs text-gray-500">(you)</span>}
+                      {isSelf && <span className="ml-1.5 text-xs text-brand-600">(you)</span>}
                     </p>
-                    {u.phone && <p className="text-xs text-gray-500">{u.phone}</p>}
+                    {u.phone && <p className="text-xs text-brand-600">{u.phone}</p>}
                   </TD>
                   <TD>
                     <Select
@@ -122,7 +122,7 @@ export function UsersPanel() {
                       ))}
                     </Select>
                   </TD>
-                  <TD className="hidden text-gray-500 sm:table-cell">{formatDate(u.created_at)}</TD>
+                  <TD className="hidden text-brand-600 sm:table-cell">{formatDate(u.created_at)}</TD>
                   <TD>
                     {u.is_active ? (
                       <Badge tone="green">Active</Badge>
@@ -136,7 +136,7 @@ export function UsersPanel() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-red-600 hover:bg-red-50"
+                          className="text-error-600 hover:bg-error-50"
                           disabled={isSelf || isLastAdmin}
                           onClick={() => setDeactivating(u)}
                         >
@@ -159,9 +159,9 @@ export function UsersPanel() {
           </TBody>
         </Table>
 
-        <div className="border-t border-gray-100 px-4 py-3 sm:px-5">
-          <p className="text-sm text-gray-600">
-            <KeyRound className="mr-1 inline h-4 w-4 text-gray-400" />
+        <div className="border-t border-cream-200 px-4 py-3 sm:px-5">
+          <p className="text-sm text-brand-700">
+            <KeyRound className="mr-1 inline h-4 w-4 text-brand-500" />
             Forgotten password? Staff can use “Forgot password” on the sign-in screen, or you can
             trigger a reset email:
           </p>
@@ -178,7 +178,7 @@ export function UsersPanel() {
               type="email"
               required
               placeholder="staff@example.com"
-              className="h-10 flex-1 rounded-lg border border-gray-300 px-3 text-sm focus:border-brand-600 focus:outline-none sm:max-w-xs"
+              className="h-10 flex-1 rounded-lg border border-cream-300 px-3 text-sm focus:border-brand-600 focus:outline-none sm:max-w-xs"
             />
             <Button type="submit" variant="outline" size="sm" loading={resetMutation.isPending}>
               Send reset email
@@ -196,39 +196,39 @@ export function UsersPanel() {
         title="Add a staff user"
         description="Two short steps — the first is in Supabase, for security"
       >
-        <div className="space-y-4 text-sm text-gray-700">
-          <p className="rounded-lg bg-blue-50 px-3 py-2 text-blue-900">
+        <div className="space-y-4 text-sm text-brand-800">
+          <p className="rounded-lg bg-brand-50 px-3 py-2 text-brand-900">
             Creating a login requires an administrative key that deliberately never exists in this
             web app. Putting it here would let anyone who opens the browser console create accounts.
           </p>
 
           <ol className="space-y-3">
             <li>
-              <p className="font-medium text-gray-900">1. Create the login</p>
-              <p className="mt-0.5 text-gray-600">
+              <p className="font-medium text-brand-900">1. Create the login</p>
+              <p className="mt-0.5 text-brand-700">
                 Supabase dashboard → <strong>Authentication → Users → Add user</strong>. Enter the
                 staff email and a password, tick <em>Auto Confirm User</em>, then copy the UID it
                 shows.
               </p>
             </li>
             <li>
-              <p className="font-medium text-gray-900">2. Give it a role</p>
-              <p className="mt-0.5 text-gray-600">
+              <p className="font-medium text-brand-900">2. Give it a role</p>
+              <p className="mt-0.5 text-brand-700">
                 Supabase → <strong>SQL Editor</strong>, paste this, replacing the UID and name:
               </p>
-              <pre className="mt-1.5 overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-gray-100">
+              <pre className="mt-1.5 overflow-x-auto rounded-lg bg-brand-950 p-3 text-xs text-cream-100">
 {`insert into public.profiles (id, full_name, role_id, branch_id)
 select 'PASTE-UID-HERE', 'Staff Name', r.id, b.id
   from public.roles r, public.branches b
  where r.code = 'staff' and b.is_default;`}
               </pre>
-              <p className="mt-1.5 text-gray-600">
+              <p className="mt-1.5 text-brand-700">
                 Use <code>'admin'</code> instead of <code>'staff'</code> for a full-access account.
               </p>
             </li>
           </ol>
 
-          <p className="text-gray-600">
+          <p className="text-brand-700">
             The user then appears in the table here, where you can change their role or remove
             access at any time.
           </p>

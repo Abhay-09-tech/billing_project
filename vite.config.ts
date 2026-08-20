@@ -43,11 +43,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'Perfect Optical Vision',
-        short_name: 'POV',
-        description: 'Optical retail management, billing and customer records',
-        theme_color: '#0f766e',
-        background_color: '#ffffff',
+        name: 'Perfect Vision Billing Software',
+        short_name: 'Perfect Vision',
+        description: 'Smart billing, clear vision. Optical retail billing, customers and prescriptions.',
+        theme_color: '#3B2418',
+        background_color: '#F7F1E8',
         display: 'standalone',
         orientation: 'portrait',
         // Relative so "Add to Home screen" works from a sub-path too.

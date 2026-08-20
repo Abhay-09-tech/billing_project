@@ -14,17 +14,23 @@ export function Table({ className, children }: { className?: string; children: R
 }
 
 export function THead({ children }: { children: ReactNode }) {
-  return <thead className="border-b border-gray-200 bg-gray-50/60">{children}</thead>
+  return <thead className="border-b border-cream-300 bg-brand-50">{children}</thead>
 }
 
 export function TBody({ children }: { children: ReactNode }) {
-  return <tbody className="divide-y divide-gray-100">{children}</tbody>
+  // Zebra striping is kept very light: enough to track a row across a wide
+  // table, not enough to make the table feel heavy.
+  return (
+    <tbody className="divide-y divide-cream-200 [&>tr:nth-child(even)]:bg-cream-100/40">
+      {children}
+    </tbody>
+  )
 }
 
 export function TR({ className, ...props }: HTMLAttributes<HTMLTableRowElement>) {
   return (
     <tr
-      className={cn(props.onClick && 'cursor-pointer transition-colors hover:bg-brand-50/40', className)}
+      className={cn(props.onClick && 'cursor-pointer transition-colors hover:bg-brand-50', className)}
       {...props}
     />
   )
@@ -33,7 +39,7 @@ export function TR({ className, ...props }: HTMLAttributes<HTMLTableRowElement>)
 export function TH({ className, ...props }: ThHTMLAttributes<HTMLTableCellElement>) {
   return (
     <th
-      className={cn('px-3 py-2.5 text-xs font-semibold tracking-wide text-gray-500 uppercase first:pl-4 last:pr-4', className)}
+      className={cn('px-3 py-2.5 text-xs font-semibold tracking-wide text-brand-800 uppercase first:pl-4 last:pr-4', className)}
       {...props}
     />
   )

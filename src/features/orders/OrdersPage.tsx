@@ -147,16 +147,16 @@ export default function OrdersPage() {
                   return (
                     <TR key={o.id} onClick={() => navigate(`/orders/${o.id}`)}>
                       <TD>
-                        <p className="font-medium text-gray-900">{o.order_code}</p>
-                        <p className="text-xs text-gray-500">{formatDate(o.created_at)}</p>
+                        <p className="font-medium text-brand-900">{o.order_code}</p>
+                        <p className="text-xs text-brand-600">{formatDate(o.created_at)}</p>
                       </TD>
                       <TD>{o.customers?.full_name ?? '—'}</TD>
-                      <TD className="hidden tabular-nums text-gray-500 md:table-cell">
+                      <TD className="hidden tabular-nums text-brand-600 md:table-cell">
                         {formatMobile(o.customers?.mobile)}
                       </TD>
                       <TDNum>{formatMoney(o.grand_total)}</TDNum>
                       <TDNum
-                        className={`hidden sm:table-cell ${balance > 0 ? 'text-amber-700' : 'text-gray-400'}`}
+                        className={`hidden sm:table-cell ${balance > 0 ? 'text-warning-700' : 'text-brand-500'}`}
                       >
                         {balance > 0 ? formatMoney(balance) : '—'}
                       </TDNum>
@@ -164,7 +164,7 @@ export default function OrdersPage() {
                         <OrderStatusBadge status={o.status} label={statusLabel(o.status)} />
                       </TD>
                       <TD
-                        className={`hidden lg:table-cell ${overdue ? 'font-medium text-red-600' : 'text-gray-500'}`}
+                        className={`hidden lg:table-cell ${overdue ? 'font-medium text-error-600' : 'text-brand-600'}`}
                       >
                         {o.expected_delivery_date ? formatDate(o.expected_delivery_date) : '—'}
                       </TD>

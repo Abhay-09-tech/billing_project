@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import { CheckCircle2, ExternalLink, Glasses, Loader2 } from 'lucide-react'
+import { CheckCircle2, ExternalLink, Loader2 } from 'lucide-react'
 import { saveSupabaseConfig, validateConfig } from '@/lib/config'
 import { Button } from '@/components/ui/button'
 import { FormField, Input } from '@/components/ui/fields'
+import { Logo } from '@/components/ui/logo'
 
 /**
  * Shown when the app has no database connection.
@@ -59,25 +60,20 @@ export function ConnectScreen({ onConnected }: { onConnected: () => void }) {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-gray-50 px-4 py-8">
+    <div className="flex min-h-dvh items-center justify-center bg-cream-100 px-4 py-8">
       <div className="w-full max-w-lg">
         <div className="mb-6 flex flex-col items-center gap-3">
-          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-700 text-white">
-            <Glasses className="h-7 w-7" />
-          </span>
-          <div className="text-center">
-            <h1 className="text-xl font-semibold text-gray-900">Perfect Optical Vision</h1>
-            <p className="mt-0.5 text-sm text-gray-500">Connect to your database to begin</p>
-          </div>
+          <Logo size="lg" showTagline />
+          <p className="mt-1 text-sm text-brand-600">Connect to your database to begin</p>
         </div>
 
-        <div className="rounded-xl border border-gray-200 bg-white p-5 sm:p-6">
-          <p className="text-sm text-gray-600">
+        <div className="rounded-xl border border-cream-300 bg-white p-5 shadow-sm shadow-brand-900/[0.04] sm:p-6">
+          <p className="text-sm text-brand-700">
             This app stores your customers, prescriptions and bills in your own Supabase database.
             Paste its two connection details below — you only do this once per device.
           </p>
 
-          <ol className="mt-4 space-y-1.5 rounded-lg bg-gray-50 p-3 text-sm text-gray-600">
+          <ol className="mt-4 space-y-1.5 rounded-lg bg-brand-50 p-3 text-sm text-brand-700">
             <li>1. Open your project at supabase.com</li>
             <li>
               2. Go to <strong>Project Settings → API</strong>
@@ -120,7 +116,7 @@ export function ConnectScreen({ onConnected }: { onConnected: () => void }) {
             </FormField>
 
             {error && (
-              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+              <p className="rounded-lg bg-error-50 px-3 py-2 text-sm text-error-700" role="alert">
                 {error}
               </p>
             )}
@@ -140,8 +136,8 @@ export function ConnectScreen({ onConnected }: { onConnected: () => void }) {
             </Button>
           </div>
 
-          <div className="mt-5 border-t border-gray-100 pt-4">
-            <p className="text-xs text-gray-500">
+          <div className="mt-5 border-t border-cream-200 pt-4">
+            <p className="text-xs text-brand-600">
               <strong>Is this safe?</strong> Yes. The anon key is designed to be public — every
               table is protected by row-level security, so this key alone can read nothing. You
               still have to sign in. Never paste the <em>service_role</em> key here; this screen
@@ -160,7 +156,7 @@ export function ConnectScreen({ onConnected }: { onConnected: () => void }) {
             <ExternalLink className="h-4 w-4" />
             Open the Supabase dashboard
           </a>
-          <p className="mt-3 text-xs text-gray-400">
+          <p className="mt-3 text-xs text-brand-500">
             No project yet? Follow docs/GETTING-STARTED.md — it takes about 30 minutes and is free
             to start.
           </p>

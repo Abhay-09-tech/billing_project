@@ -56,10 +56,10 @@ export default function PrescriptionsPage() {
                   <TR key={rx.id} onClick={() => navigate(`/customers/${rx.customers.id}`)}>
                     <TD className="whitespace-nowrap">{formatDate(rx.rx_date)}</TD>
                     <TD>
-                      <p className="font-medium text-gray-900">{rx.customers.full_name}</p>
-                      <p className="text-xs text-gray-500">{rx.customers.customer_code}</p>
+                      <p className="font-medium text-brand-900">{rx.customers.full_name}</p>
+                      <p className="text-xs text-brand-600">{rx.customers.customer_code}</p>
                     </TD>
-                    <TD className="hidden tabular-nums text-gray-500 sm:table-cell">
+                    <TD className="hidden tabular-nums text-brand-600 sm:table-cell">
                       {formatMobile(rx.customers.mobile)}
                     </TD>
                     <TD>
@@ -69,11 +69,11 @@ export default function PrescriptionsPage() {
                         <Badge tone="blue">{rx.rx_type.replace('_', ' ')}</Badge>
                       )}
                     </TD>
-                    <TD className="hidden tabular-nums text-gray-600 md:table-cell">
+                    <TD className="hidden tabular-nums text-brand-700 md:table-cell">
                       {formatRxPower(rx.od_sph, { plano: true })} / {formatRxPower(rx.od_cyl)}
                       {rx.od_axis != null ? ` × ${rx.od_axis}°` : ''}
                     </TD>
-                    <TD className="hidden tabular-nums text-gray-600 md:table-cell">
+                    <TD className="hidden tabular-nums text-brand-700 md:table-cell">
                       {formatRxPower(rx.os_sph, { plano: true })} / {formatRxPower(rx.os_cyl)}
                       {rx.os_axis != null ? ` × ${rx.os_axis}°` : ''}
                     </TD>

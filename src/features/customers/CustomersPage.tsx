@@ -105,13 +105,13 @@ export default function CustomersPage() {
                 {query.data.rows.map((c) => (
                   <TR key={c.id} onClick={() => navigate(`/customers/${c.id}`)}>
                     <TD>
-                      <p className="font-medium text-gray-900">{c.full_name}</p>
-                      <p className="text-xs text-gray-500 sm:hidden">{c.customer_code}</p>
+                      <p className="font-medium text-brand-900">{c.full_name}</p>
+                      <p className="text-xs text-brand-600 sm:hidden">{c.customer_code}</p>
                     </TD>
-                    <TD className="hidden text-gray-500 sm:table-cell">{c.customer_code}</TD>
+                    <TD className="hidden text-brand-600 sm:table-cell">{c.customer_code}</TD>
                     <TD className="tabular-nums">{formatMobile(c.mobile)}</TD>
-                    <TD className="hidden text-gray-500 md:table-cell">{c.city ?? '—'}</TD>
-                    <TD className="hidden text-gray-500 lg:table-cell">
+                    <TD className="hidden text-brand-600 md:table-cell">{c.city ?? '—'}</TD>
+                    <TD className="hidden text-brand-600 lg:table-cell">
                       {c.last_visit_at ? formatRelativeDay(c.last_visit_at) : 'Never'}
                     </TD>
                     <TD className="hidden sm:table-cell">

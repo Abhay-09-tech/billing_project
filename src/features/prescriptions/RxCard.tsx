@@ -30,12 +30,12 @@ export function RxCard({
     <div
       className={cn(
         'rounded-lg border p-3',
-        voided ? 'border-gray-200 bg-gray-50 opacity-70' : 'border-gray-200 bg-white',
+        voided ? 'border-cream-300 bg-cream-100 opacity-70' : 'border-cream-300 bg-white',
         className,
       )}
     >
       <div className="mb-2.5 flex flex-wrap items-center gap-2">
-        <p className="text-sm font-semibold text-gray-900">{formatDate(rx.rx_date)}</p>
+        <p className="text-sm font-semibold text-brand-900">{formatDate(rx.rx_date)}</p>
         <Badge tone="blue">{RX_TYPE_LABELS[rx.rx_type]}</Badge>
         {voided && <Badge tone="red">Voided</Badge>}
         {rx.supersedes_id && <Badge tone="gray">Revision</Badge>}
@@ -44,7 +44,7 @@ export function RxCard({
       <div className="overflow-x-auto">
         <table className="w-full min-w-[19rem] text-sm tabular-nums">
           <thead>
-            <tr className="text-xs text-gray-500">
+            <tr className="text-xs text-brand-600">
               <th className="w-10 pb-1 text-left font-medium">Eye</th>
               <th className="pb-1 text-right font-medium">SPH</th>
               <th className="pb-1 text-right font-medium">CYL</th>
@@ -76,17 +76,17 @@ export function RxCard({
         </table>
       </div>
 
-      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-600">
         {rx.pd_binocular != null && <span>PD (binocular): {rx.pd_binocular}</span>}
         {rx.od_seg_ht != null && <span>Seg ht OD: {rx.od_seg_ht}</span>}
         {rx.os_seg_ht != null && <span>Seg ht OS: {rx.os_seg_ht}</span>}
-        {hasPrism(rx) && <span className="text-amber-700">Prism prescribed</span>}
+        {hasPrism(rx) && <span className="text-warning-700">Prism prescribed</span>}
         {rx.prescribed_by && <span>By: {rx.prescribed_by}</span>}
       </div>
 
-      {rx.remarks && <p className="mt-2 text-sm text-gray-600">{rx.remarks}</p>}
+      {rx.remarks && <p className="mt-2 text-sm text-brand-700">{rx.remarks}</p>}
       {voided && rx.void_reason && (
-        <p className="mt-2 text-sm text-red-700">Voided: {rx.void_reason}</p>
+        <p className="mt-2 text-sm text-error-700">Voided: {rx.void_reason}</p>
       )}
     </div>
   )
@@ -110,8 +110,8 @@ function RxRow({
   compact: boolean
 }) {
   return (
-    <tr className="border-t border-gray-100">
-      <td className="py-1.5 text-left text-xs font-semibold text-gray-500">{label}</td>
+    <tr className="border-t border-cream-200">
+      <td className="py-1.5 text-left text-xs font-semibold text-brand-600">{label}</td>
       <td className="py-1.5 text-right">{formatRxPower(sph, { plano: true })}</td>
       <td className="py-1.5 text-right">{formatRxPower(cyl)}</td>
       <td className="py-1.5 text-right">{axis != null ? `${axis}°` : '—'}</td>
