@@ -1,16 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import {
-  ArrowLeft,
-  CreditCard,
-  Eye,
-  MessageCircle,
-  Phone,
-  Plus,
-  Receipt,
-  ShoppingBag,
-} from 'lucide-react'
+import { ArrowLeft, CreditCard, Eye, MessageCircle, Pencil, Phone, Plus, Receipt, ShoppingBag } from 'lucide-react'
 import { getCustomer360 } from '@/services/customers'
 import { formatMoney } from '@/lib/money'
 import { formatDate, formatMobile, formatRelativeDay } from '@/lib/format'
@@ -23,6 +14,8 @@ import { InvoiceStatusBadge, OrderStatusBadge, PaymentStatusBadge, WaStatusBadge
 import { Table, TBody, TD, TDNum, TH, THead, THNum, TR } from '@/components/ui/table'
 import { RxCard } from '@/features/prescriptions/RxCard'
 import { NewPrescriptionDialog } from '@/features/prescriptions/NewPrescriptionDialog'
+import { VoidPrescriptionDialog } from '@/features/prescriptions/VoidPrescriptionDialog'
+import { EditCustomerDialog } from './EditCustomerDialog'
 import { WhatsAppShareDialog } from '@/features/whatsapp/WhatsAppShareDialog'
 import { buildGeneralMessage } from '@/lib/whatsapp'
 import { getSetting } from '@/services/settings'
@@ -33,6 +26,8 @@ export default function CustomerProfilePage() {
   const { can } = useAuth()
   const [rxOpen, setRxOpen] = useState(false)
   const [waOpen, setWaOpen] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
+  const [voidRxId, setVoidRxId] = useState<string | null>(null)
 
   const shop = useQuery({
     queryKey: ['settings', 'shop.profile'],
@@ -81,6 +76,12 @@ export default function CustomerProfilePage() {
                 {formatMobile(customer.mobile)}
               </Button>
             </a>
+            {can(PERMS.customersUpdate) && (
+              <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
+                <Pencil className="h-4 w-4" />
+                Edit details
+              </Button>
+            )}
             {can(PERMS.whatsappSend) && (
               <Button
                 variant="outline"
@@ -155,7 +156,17 @@ export default function CustomerProfilePage() {
                     </p>
                     <div className="space-y-2">
                       {history.map((rx) => (
-                        <RxCard key={rx.id} rx={rx} compact />
+                        <div key={rx.id}>
+                          <RxCard rx={rx} compact />
+                          {!rx.voided_at && can(PERMS.prescriptionsCreate) && (
+                            <button
+                              onClick={() => setVoidRxId(rx.id)}
+                              className="mt-1 text-xs font-medium text-error-600 hover:underline"
+                            >
+                              Mark as entered in error
+                            </button>
+                          )}
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -303,6 +314,17 @@ export default function CustomerProfilePage() {
 
       {id && (
         <NewPrescriptionDialog open={rxOpen} onOpenChange={setRxOpen} customerId={id} />
+      )}
+
+      <EditCustomerDialog open={editOpen} onOpenChange={setEditOpen} customer={customer} />
+
+      {voidRxId && (
+        <VoidPrescriptionDialog
+          open={Boolean(voidRxId)}
+          onOpenChange={(v) => !v && setVoidRxId(null)}
+          prescriptionId={voidRxId}
+          customerId={customer.id}
+        />
       )}
 
       <WhatsAppShareDialog

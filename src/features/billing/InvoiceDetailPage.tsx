@@ -5,6 +5,7 @@ import { ArrowLeft, CheckCircle2, ShoppingBag } from 'lucide-react'
 import { toast } from 'sonner'
 import { cancelInvoice, getInvoiceDetail, issueInvoice } from '@/services/billing'
 import { getCustomer360 } from '@/services/customers'
+import type { PaymentRow } from '@/types/database'
 import { formatMoney } from '@/lib/money'
 import { formatDate, formatDateTime } from '@/lib/format'
 import { friendlyError } from '@/lib/errors'
@@ -19,6 +20,7 @@ import { FormField, Textarea } from '@/components/ui/fields'
 import { InvoicePrint } from './InvoicePrint'
 import { InvoiceActions } from './InvoiceActions'
 import { RecordPaymentDialog } from '@/features/payments/RecordPaymentDialog'
+import { RefundPaymentDialog } from '@/features/payments/RefundPaymentDialog'
 
 export default function InvoiceDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -30,6 +32,7 @@ export default function InvoiceDetailPage() {
   const [payOpen, setPayOpen] = useState(false)
   const [cancelOpen, setCancelOpen] = useState(false)
   const [cancelReason, setCancelReason] = useState('')
+  const [refunding, setRefunding] = useState<PaymentRow | null>(null)
   const [showConfirmation, setShowConfirmation] = useState(searchParams.get('created') === '1')
 
   const query = useQuery({
@@ -374,7 +377,17 @@ export default function InvoiceDetailPage() {
                         {formatMoney(p.amount)}
                       </p>
                     </div>
-                    <p className="mt-0.5 text-xs text-brand-500">{p.payment_code}</p>
+                    <div className="mt-0.5 flex items-center justify-between gap-2">
+                      <p className="text-xs text-brand-500">{p.payment_code}</p>
+                      {p.direction > 0 && can(PERMS.paymentsRefund) && (
+                        <button
+                          onClick={() => setRefunding(p)}
+                          className="text-xs font-medium text-error-600 hover:underline"
+                        >
+                          Refund
+                        </button>
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -390,6 +403,13 @@ export default function InvoiceDetailPage() {
         invoiceId={invoice.id}
         balance={balance}
         customerName={invoice.customers?.full_name ?? ''}
+        onDone={invalidate}
+      />
+
+      <RefundPaymentDialog
+        open={Boolean(refunding)}
+        onOpenChange={(v) => !v && setRefunding(null)}
+        payment={refunding}
         onDone={invalidate}
       />
 
