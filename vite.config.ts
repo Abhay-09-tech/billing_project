@@ -41,7 +41,7 @@ export default defineConfig({
       // keep running the version it was installed with, forever. Shop staff
       // should never have to think about app versions.
       registerType: 'autoUpdate',
-      includeAssets: ['perfect-vision-billing-logo.png'],
+      includeAssets: ['perfect-vision-billing-logo.png', 'app-icon-512.png'],
       manifest: {
         name: 'Perfect Vision Billing Software',
         short_name: 'Perfect Vision',
@@ -57,8 +57,11 @@ export default defineConfig({
         // binaries: it stays sharp at every size and both Android Chrome and
         // iOS Safari accept it for "Add to Home screen".
         icons: [
-          { src: 'perfect-vision-billing-logo.png', sizes: '512x512', type: 'image/png' },
-          { src: 'perfect-vision-billing-logo.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          // Home-screen icons must be square. The full lock-up is 2080x1880, so a
+          // square crop of the emblem is used here — the size/resolution
+          // exception, not a different logo.
+          { src: 'app-icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'app-icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {

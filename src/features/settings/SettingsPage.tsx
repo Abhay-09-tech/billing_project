@@ -11,9 +11,10 @@ import { cn } from '@/lib/utils'
 import { UsersPanel } from './UsersPanel'
 import { AuditPanel } from './AuditPanel'
 import { BackupPanel } from './BackupPanel'
+import { InstallPanel } from './InstallPanel'
 import { SetupChecklist } from './SetupChecklist'
 
-type Tab = 'setup' | 'shop' | 'billing' | 'numbering' | 'users' | 'audit' | 'backup'
+type Tab = 'setup' | 'shop' | 'billing' | 'numbering' | 'users' | 'audit' | 'backup' | 'install'
 
 interface ShopProfile {
   name?: string
@@ -52,6 +53,7 @@ export default function SettingsPage() {
               ['users', 'Users'],
               ['audit', 'Audit log'],
               ['backup', 'Export & backup'],
+              ['install', 'Install app'],
             ] as const
           ).map(([value, label]) => (
             <button
@@ -77,6 +79,7 @@ export default function SettingsPage() {
       {tab === 'users' && <UsersPanel />}
       {tab === 'audit' && <AuditPanel />}
       {tab === 'backup' && <BackupPanel />}
+      {tab === 'install' && <InstallPanel />}
     </>
   )
 }

@@ -33,6 +33,7 @@ const COFFEE = '#6F4E37'
 const MEDIUM = '#8B6F47'
 const LIGHT = '#C8A27A'
 const WHITE = '#FFFFFF'
+const CREAM = '#F7F1E8'
 
 /** Receipt torn edge — even zigzag across the full width. */
 function tornEdge(width, depth, teeth) {
@@ -197,9 +198,37 @@ await page.waitForTimeout(200)
 
 const buf = await page.screenshot({ omitBackground: true })
 writeFileSync(OUT, buf)
+
+// ── Square app icon ───────────────────────────────────────────────────────
+// Home-screen icons must be square, and at ~48px the wordmark is unreadable,
+// so this carries the emblem alone on a filled ground. Filled because
+// Android's maskable icons crop to a circle and a transparent icon would
+// show the launcher background through it.
+const ICON = 512
+const iconHtml = `
+<html><head><style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width:${ICON}px; height:${ICON}px; background:${CREAM};
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* Inset so the emblem survives Android's circular mask. */
+  .inner { width:${Math.round(ICON * 0.74)}px; display:flex; }
+  svg { width:100%; height:auto; }
+</style></head>
+<body><div class="inner">${emblem}</div></body></html>`
+
+await page.setViewportSize({ width: ICON, height: ICON })
+await page.setContent(iconHtml, { waitUntil: 'load' })
+await page.waitForTimeout(150)
+const iconBuf = await page.screenshot()
+writeFileSync(path.join(ROOT, 'public/app-icon-512.png'), iconBuf)
+
 await browser.close()
 
 console.log(
   `wrote public/perfect-vision-billing-logo.png ` +
-    `(${W * SCALE}x${H * SCALE}, ${(buf.length / 1024).toFixed(1)} KB, transparent)`,
+    `(${W * SCALE}x${H * SCALE}, ${(buf.length / 1024).toFixed(1)} KB, transparent)
+` +
+    `wrote public/app-icon-512.png (${ICON}x${ICON}, ${(iconBuf.length / 1024).toFixed(1)} KB)`,
 )
