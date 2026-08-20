@@ -35,8 +35,8 @@ export function AppShell() {
     <div className="min-h-dvh bg-cream-100">
       {/* ── Desktop sidebar ─────────────────────────────────────────────── */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col bg-brand-900 lg:flex">
-        <div className="px-4 py-5">
-          <Logo tone="onDark" width="sm" />
+        <div className="flex items-center justify-center border-b border-brand-800 bg-cream-50 px-4 py-4">
+          <Logo width="sm" />
         </div>
         <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 pb-4" aria-label="Main">
           {items.map((item) => (

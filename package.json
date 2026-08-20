@@ -29,7 +29,8 @@
     "db:verify-bundle": "npm run db:bundle && node scripts/db-test/verify-bundle.mjs",
     "setup:pdf": "node scripts/setup-pdf/generate.mjs",
     "theme:contrast": "node scripts/theme/contrast.mjs",
-    "connect:shoot": "node scripts/theme/shoot-connect.mjs"
+    "connect:shoot": "node scripts/theme/shoot-connect.mjs",
+    "logo:build": "node scripts/theme/build-logo.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
