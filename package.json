@@ -24,7 +24,9 @@
     "db:test": "node scripts/db-test/run.mjs",
     "pdf:test": "node scripts/pdf-test/check.mjs",
     "db:types": "supabase gen types typescript --local > src/types/database.ts",
-    "verify": "npm run typecheck && npm run lint && npm run test && npm run pdf:test"
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run pdf:test",
+    "db:bundle": "node scripts/bundle-migrations.mjs",
+    "db:verify-bundle": "npm run db:bundle && node scripts/db-test/verify-bundle.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

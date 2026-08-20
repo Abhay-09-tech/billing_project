@@ -76,7 +76,7 @@ export function validateConfig(url: string, anonKey: string): ConfigValidation {
   const trimmedKey = anonKey.trim()
 
   if (!trimmedUrl) return { valid: false, error: 'Enter your Project URL.' }
-  if (!trimmedKey) return { valid: false, error: 'Enter your anon public key.' }
+  if (!trimmedKey) return { valid: false, error: 'Enter your publishable key.' }
 
   let parsed: URL
   try {
@@ -88,25 +88,40 @@ export function validateConfig(url: string, anonKey: string): ConfigValidation {
     return { valid: false, error: 'The Project URL must start with https://' }
   }
 
-  // The service-role key is a JWT whose payload names the role. Catching it
-  // here prevents the single most damaging configuration mistake possible.
-  if (looksLikeServiceRoleKey(trimmedKey)) {
+  // Catching a secret key here prevents the single most damaging
+  // configuration mistake available: a key that bypasses row-level security
+  // handed to every visitor's browser.
+  if (isSecretKey(trimmedKey)) {
     return {
       valid: false,
       error:
-        'That is the service_role key, which bypasses all security and must never be used in a browser. Copy the "anon public" key instead.',
+        'That is a secret key. It bypasses all security and must never be used in a browser. Copy the key labelled "publishable" (or "anon public" on older projects) instead.',
     }
   }
 
-  if (trimmedKey.length < 40) {
-    return { valid: false, error: 'That key looks too short. Copy the whole "anon public" key.' }
+  if (trimmedKey.length < 30) {
+    return { valid: false, error: 'That key looks too short. Copy the whole publishable key.' }
   }
 
   return { valid: true }
 }
 
-function looksLikeServiceRoleKey(key: string): boolean {
-  const parts = key.split('.')
+/**
+ * Supabase has shipped two key formats, and both have a privileged variant
+ * that must never reach a browser:
+ *
+ *   current  sb_secret_…       (privileged)  vs  sb_publishable_…  (safe)
+ *   legacy   JWT role=service_role           vs  JWT role=anon      (safe)
+ *
+ * Checking only the JWT shape would let every `sb_secret_` key through, since
+ * those are opaque strings rather than decodable tokens.
+ */
+export function isSecretKey(key: string): boolean {
+  const trimmed = key.trim()
+
+  if (trimmed.startsWith('sb_secret_')) return true
+
+  const parts = trimmed.split('.')
   if (parts.length !== 3) return false
   try {
     const payload = JSON.parse(atob(parts[1]!.replace(/-/g, '+').replace(/_/g, '/')))
