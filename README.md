@@ -1,23 +1,22 @@
-# Perfect Optical Vision
+# Perfect Vision — Billing Software
 
-Optical retail management, billing and WhatsApp automation for **Perfect Optical Vision**.
+**Smart billing. Clear vision.**
 
-### 🔗 Use the software
+Optical retail management, GST billing and WhatsApp for a real spectacles shop.
 
-**https://abhay-09-tech.github.io/billing_project/**
+### 🔗 Open the software
 
-Works on any phone, tablet or computer. On a phone you can install it like a normal
-app: **Chrome → ⋮ → Add to Home screen**, or **Safari → Share → Add to Home Screen**.
+## **https://abhay-09-tech.github.io/billing_project/**
 
-On first open it asks for your Supabase **Project URL** and **publishable key**
-(Supabase → Project Settings → API). It remembers them on that device. The
-publishable key is safe to enter — every table is protected by row-level security,
-and you still have to sign in.
+Works on any phone, tablet or computer. No setup — it opens straight at the
+sign-in screen.
 
-> **Deploying this yourself?** GitHub Pages has to be switched on once, by hand:
-> **Settings → Pages → Build and deployment → Source → GitHub Actions**. The
-> workflow cannot enable it for you — `GITHUB_TOKEN` has no admin scope — so
-> until that switch is flipped the deploy job stops at "Configure Pages".
+**Install it on a phone:** sign in, then **Settings → Install app**. On Android
+that is a one-tap button; on iPhone it shows the Safari Share-sheet steps. Once
+installed it runs full screen with its own icon and updates itself.
+
+Staff accounts are created by an administrator — see
+**[docs/GETTING-STARTED.md](docs/GETTING-STARTED.md)**.
 
 ---
 
@@ -121,11 +120,11 @@ through creating the Supabase project and signing in for the first time.
 |---|---|
 | Architecture, ERD, security, deployment plan | ✅ Done — `docs/ARCHITECTURE.md` |
 | Database: 33 tables, RLS, RPCs, seed | ✅ Done and verified |
-| Database test suite (40 assertions) | ✅ Passing |
+| Database test suite (56 assertions) | ✅ Passing |
 | Auth, RBAC, responsive shell, navigation | ✅ Done |
 | Dashboard — live metrics, today's queue, sales overview | ✅ Done |
 | Customers — search, fast create with duplicate check, Customer 360 | ✅ Done |
-| Prescriptions — entry, history, image upload | ✅ Done |
+| Prescriptions — entry, history, void-with-reason | ✅ Done |
 | Products — catalogue, GST/HSN per product, opening stock | ✅ Done |
 | Inventory — levels, low-stock alerts, movement ledger | ✅ Done |
 | Orders — builder, 11-state workflow, send to lab | ✅ Done |
@@ -133,10 +132,12 @@ through creating the Supabase project and signing in for the first time.
 | Billing — draft → issue → print/PDF, cancel | ✅ Done |
 | Payments — record, methods, outstanding + reminders | ✅ Done |
 | Reports — sales, payment methods, outstanding ageing, CSV export | ✅ Done |
-| Settings — shop profile, GST config, numbering | ✅ Done |
+| Settings — shop profile, GST config, numbering, users, audit, export | ✅ Done |
+| Corrections — edit customer, refund payment, void prescription | ✅ Done |
+| Deployed and live, installable as a phone app | ✅ Done |
 | WhatsApp — dashboard, templates, automation toggles | ✅ Done (UI) |
 | WhatsApp — Cloud API dispatcher + delivery webhook | ⏳ Needs the SIM and Meta account |
-| Playwright E2E, security + performance review, deployment | ⏳ Phase 11–12 |
+| Playwright E2E, security + performance review | ⏳ Phase 11–12 |
 
 Every screen in the navigation is built and reads live data. Nothing on any screen is
 hardcoded or sample data.
@@ -154,7 +155,9 @@ outstanding list open WhatsApp with the message pre-typed, which works today.
 
 1. Create the project, then `npx supabase link --project-ref <ref>`.
 2. `npm run db:push` to apply migrations.
-3. Create the two private storage buckets: `prescription-files`, `invoices`.
+3. Create the private storage bucket `invoices`. (`prescription-files` exists in the
+   schema but the upload UI was removed at the owner's request — see
+   `src/features/prescriptions/NewPrescriptionDialog.tsx`.)
 4. Disable public sign-up in Auth settings — staff accounts are created by an admin.
 5. Create the first admin: add the auth user, then insert a `profiles` row with the
    `admin` role. Create a **second** admin immediately (see the lockout risk in
