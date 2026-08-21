@@ -1,0 +1,4 @@
+# Single-page app: every path is served the app shell, which then routes
+# client-side. Without this, refreshing on /billing or opening a deep link
+# would 404 on Cloudflare Pages and Netlify.
+/*    /index.html   200

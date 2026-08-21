@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ChevronDown, Upload } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { toast } from 'sonner'
-import { createPrescription, uploadPrescriptionFile } from '@/services/prescriptions'
+import { createPrescription } from '@/services/prescriptions'
 import type { PrescriptionRow, RxType } from '@/types/database'
 import { friendlyError } from '@/lib/errors'
 import { Button } from '@/components/ui/button'
@@ -40,7 +40,6 @@ const num = (v: string): number | null => {
 export function NewPrescriptionDialog({ open, onOpenChange, customerId, onCreated }: Props) {
   const queryClient = useQueryClient()
   const [showAdvanced, setShowAdvanced] = useState(false)
-  const [file, setFile] = useState<File | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
 
   const form = useForm<RxFormValues>({
@@ -82,16 +81,6 @@ export function NewPrescriptionDialog({ open, onOpenChange, customerId, onCreate
         os_prism_v: num(values.os_prism_v),
         os_prism_v_base: (values.os_prism_v_base || null) as 'up' | 'down' | null,
       })
-      if (file) {
-        try {
-          await uploadPrescriptionFile(customerId, rx.id, file)
-        } catch (err) {
-          // The prescription is already saved — the upload failing must not
-          // discard clinical data the staff member just typed.
-          toast.warning('Prescription saved, but the image upload failed. Try attaching it again.')
-          console.error(err)
-        }
-      }
       return rx
     },
     onSuccess: (rx) => {
@@ -99,7 +88,6 @@ export function NewPrescriptionDialog({ open, onOpenChange, customerId, onCreate
       void queryClient.invalidateQueries({ queryKey: ['customer', customerId] })
       void queryClient.invalidateQueries({ queryKey: ['prescriptions'] })
       form.reset()
-      setFile(null)
       setShowAdvanced(false)
       onOpenChange(false)
       onCreated?.(rx)
@@ -263,27 +251,6 @@ export function NewPrescriptionDialog({ open, onOpenChange, customerId, onCreate
 
         <FormField label="Remarks" htmlFor="rx-remarks">
           <Textarea id="rx-remarks" rows={2} {...form.register('remarks')} />
-        </FormField>
-
-        <FormField label="Prescription photo" hint="Optional — photograph the paper prescription with the camera">
-          <label className="flex min-h-touch cursor-pointer items-center gap-2 rounded-lg border border-dashed border-cream-300 px-3 py-2.5 text-sm text-brand-700 hover:border-brand-400 hover:bg-brand-50/40">
-            <Upload className="h-4 w-4" />
-            {file ? file.name : 'Take photo or choose file'}
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp,application/pdf"
-              capture="environment"
-              className="sr-only"
-              onChange={(e) => {
-                const f = e.target.files?.[0] ?? null
-                if (f && f.size > 10 * 1024 * 1024) {
-                  toast.error('That file is larger than 10 MB. Please choose a smaller image.')
-                  return
-                }
-                setFile(f)
-              }}
-            />
-          </label>
         </FormField>
 
         {formError && (
