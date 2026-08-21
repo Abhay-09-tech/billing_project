@@ -171,3 +171,40 @@ describe('money helpers', () => {
     expect(moneyEquals(100, 100.01)).toBe(false)
   })
 })
+
+describe('discount larger than the line — the blank-screen bug', () => {
+  // computeGstLine throws on a negative net, which is the right rule for the
+  // billing path. The order builder used to call it during render, so typing
+  // "500" into a 100-rupee line (passing through 5, 50, 500) threw mid-render
+  // and unmounted the whole app. These lock in the behaviour the UI relies on.
+  const line = (discountAmt: number) => ({
+    qty: 1,
+    unitPrice: 100,
+    discountAmt,
+    gstRatePct: 12,
+    taxInclusive: true,
+    intraState: true,
+  })
+
+  it('still rejects a discount above the line value', () => {
+    expect(() => computeGstLine(line(500))).toThrow(/discount cannot exceed/i)
+  })
+
+  it('accepts a discount exactly equal to the line value', () => {
+    const r = computeGstLine(line(100))
+    expect(r.lineTotal).toBe(0)
+    expect(r.taxableAmt).toBe(0)
+  })
+
+  it('accepts a normal discount', () => {
+    const r = computeGstLine(line(20))
+    expect(r.lineTotal).toBe(80)
+  })
+
+  it('totals skip invalid lines instead of throwing, as the order builder does', () => {
+    const lines = [line(20), line(500), line(10)]
+    const safe = lines.filter((l) => l.discountAmt <= l.qty * l.unitPrice)
+    expect(() => computeInvoiceTotals(safe)).not.toThrow()
+    expect(computeInvoiceTotals(safe).grandTotal).toBe(170) // 80 + 90
+  })
+})

@@ -5,6 +5,7 @@ import { Toaster } from 'sonner'
 import { App } from './app/App'
 import { AuthProvider } from './app/AuthProvider'
 import { ConnectScreen } from './features/setup/ConnectScreen'
+import { ErrorBoundary } from './app/ErrorBoundary'
 import { isConfigured } from './lib/config'
 import { resetSupabaseClient } from './lib/supabase'
 import './index.css'
@@ -54,6 +55,10 @@ function Root() {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Root />
+    {/* Outermost, so a render error anywhere shows a recoverable screen
+        rather than an unexplained blank page. */}
+    <ErrorBoundary>
+      <Root />
+    </ErrorBoundary>
   </StrictMode>,
 )

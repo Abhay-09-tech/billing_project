@@ -93,17 +93,27 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
     if (live && !prescriptionId) setPrescriptionId(live.id)
   }, [customer.data, prescriptionId])
 
+  /** A discount larger than the line's own value is the one invalid state. */
+  const lineOverDiscounted = (l: DraftLine) =>
+    l.discount_amt > Math.round(l.qty * l.unit_price * 100) / 100 + 0.0001
+
+  const invalidLines = useMemo(() => lines.filter(lineOverDiscounted), [lines])
+
   const totals = useMemo(
     () =>
       computeInvoiceTotals(
-        lines.map((l) => ({
-          qty: l.qty,
-          unitPrice: l.unit_price,
-          discountAmt: l.discount_amt,
-          gstRatePct: l.gst_rate_pct,
-          taxInclusive: true,
-          intraState: true,
-        })),
+        lines
+          // Excluded rather than computed: computeGstLine throws on a negative
+          // net, and a throw here happens during render, blanking the screen.
+          .filter((l) => !lineOverDiscounted(l))
+          .map((l) => ({
+            qty: l.qty,
+            unitPrice: l.unit_price,
+            discountAmt: l.discount_amt,
+            gstRatePct: l.gst_rate_pct,
+            taxInclusive: true,
+            intraState: true,
+          })),
       ),
     [lines],
   )
@@ -196,6 +206,7 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
     Boolean(customerId) &&
     lines.length > 0 &&
     lines.every((l) => l.description.trim() && l.unit_price >= 0) &&
+    invalidLines.length === 0 &&
     !advanceTooHigh
 
   return (
@@ -399,13 +410,23 @@ export function NewOrderDialog({ open, onOpenChange, initialCustomerId, onCreate
                               }
                             />
                           </FormField>
-                          <FormField label="Discount ₹" htmlFor={`${line.key}-disc`}>
+                          <FormField
+                            label="Discount ₹"
+                            error={
+                              lineOverDiscounted(line)
+                                ? `Max ${formatMoney(line.qty * line.unit_price)}`
+                                : undefined
+                            }
+                            htmlFor={`${line.key}-disc`}
+                          >
                             <Input
                               id={`${line.key}-disc`}
                               type="number"
                               min={0}
+                              max={line.qty * line.unit_price}
                               step="0.01"
                               inputMode="decimal"
+                              aria-invalid={lineOverDiscounted(line) || undefined}
                               value={line.discount_amt}
                               onChange={(e) =>
                                 updateLine(line.key, { discount_amt: Number(e.target.value) || 0 })
